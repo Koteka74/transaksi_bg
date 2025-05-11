@@ -1,6 +1,6 @@
 // data.js
 
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyKQAGSPozSFPpsFX_6RmLoJU0Qt3spvayKm8m83fbxy1AlvK9h0p0_fB0klzJ2Qos/exec'; // ganti dengan URL Web App Anda
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyKQAGSPozSFPpsFX_6RmLoJU0Qt3spvayKm8m83fbxy1AlvK9h0p0_fB0klzJ2Qos/exec?token=RAHASIA123'; // ganti dengan URL Web App Anda
 
 function formatTanggalIndo(tgl) {
   const d = new Date(tgl);
