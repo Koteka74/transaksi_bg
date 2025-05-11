@@ -1,0 +1,51 @@
+<!-- index.html (Dashboard) -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Pengeluaran</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg p-4">
+      <h2 class="text-2xl font-bold mb-6">Pengeluaran</h2>
+      <nav>
+        <ul class="space-y-4">
+          <li><a href="index.html" class="text-blue-600 font-semibold">Dashboard</a></li>
+          <li><a href="input.html" class="hover:text-blue-600">Input Bahan Baku</a></li>
+          <li><a href="data.html" class="hover:text-blue-600">Data Pembelian</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6">
+      <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Total Pengeluaran Bulan Ini</h2>
+          <p id="totalPengeluaran" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Saldo Kas Sekarang</h2>
+          <p id="saldoKas" class="text-2xl font-bold text-green-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow col-span-1 md:col-span-3">
+          <h2 class="text-lg font-semibold mb-2">Grafik Pengeluaran Bulanan</h2>
+          <canvas id="grafikPengeluaran"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow col-span-1 md:col-span-3">
+          <h2 class="text-lg font-semibold mb-2">Rekap Pembelian Tertinggi</h2>
+          <ul id="rekapPembelian" class="list-disc list-inside text-gray-700"></ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
