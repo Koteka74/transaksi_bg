@@ -1,5 +1,5 @@
 // Ganti dengan URL Web App Anda
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyYFhJYp8w1WNN1VnLXmJHVOcDo99J4SXgWt2yOY8t6nQblsqD39K4BLRlRod0Pkgo/exec';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyKQAGSPozSFPpsFX_6RmLoJU0Qt3spvayKm8m83fbxy1AlvK9h0p0_fB0klzJ2Qos/exec';
 
 // Format tanggal ke dd/mm/yyyy
 function formatTanggalIndo(tgl) {
