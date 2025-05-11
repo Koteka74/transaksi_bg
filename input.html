@@ -1,0 +1,80 @@
+<!-- input.html (Input Bahan Baku) -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Pembelian Bahan Baku</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg p-4">
+      <h2 class="text-2xl font-bold mb-6">Pengeluaran</h2>
+      <nav>
+        <ul class="space-y-4">
+          <li><a href="index.html" class="hover:text-blue-600">Dashboard</a></li>
+          <li><a href="input.html" class="text-blue-600 font-semibold">Input Bahan Baku</a></li>
+          <li><a href="data.html" class="hover:text-blue-600">Data Pembelian</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6">
+      <h1 class="text-3xl font-bold mb-4">Input Pembelian Bahan Baku</h1>
+      <form id="formPembelian" class="bg-white p-6 rounded shadow space-y-4">
+        <div>
+          <label class="block font-medium">Tanggal</label>
+          <input type="date" name="tanggal" required class="mt-1 block w-full border border-gray-300 rounded p-2">
+        </div>
+        <div>
+          <label class="block font-medium">Uraian</label>
+          <input type="text" name="uraian" required class="mt-1 block w-full border border-gray-300 rounded p-2">
+        </div>
+        <div>
+          <label class="block font-medium">Jumlah Pengeluaran (Rp)</label>
+          <input type="number" name="debet" required class="mt-1 block w-full border border-gray-300 rounded p-2">
+        </div>
+        <div>
+          <label class="block font-medium">Keterangan</label>
+          <input type="text" name="keterangan" class="mt-1 block w-full border border-gray-300 rounded p-2">
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('formPembelian').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      const formatted = {
+        tanggal: data.tanggal,
+        uraian: data.uraian,
+        debet: Number(data.debet),
+        keterangan: data.keterangan
+      };
+
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyKQAGSPozSFPpsFX_6RmLoJU0Qt3spvayKm8m83fbxy1AlvK9h0p0_fB0klzJ2Qos/exec', {
+          method: 'POST',
+          body: JSON.stringify(formatted),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const result = await response.json();
+        alert('Berhasil disimpan!');
+        this.reset();
+      } catch (err) {
+        console.error(err);
+        alert('Gagal menyimpan data.');
+      }
+    });
+  </script>
+</body>
+</html>
