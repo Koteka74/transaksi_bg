@@ -47,34 +47,27 @@
   </div>
 
   <script>
-    document.getElementById('formPembelian').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      const formatted = {
-        tanggal: data.tanggal,
-        uraian: data.uraian,
-        debet: Number(data.debet),
-        keterangan: data.keterangan
-      };
+    const form = document.getElementById('formInput');
 
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbznoZQwrC2j2OwjtGD5vophK88Ceeb9yUS_ud8drZFxd62Na1-sIzCgRGaczq-7ntA/exec', {
-          method: 'POST',
-          body: JSON.stringify(formatted),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-        const result = await response.json();
-        alert('Berhasil disimpan!');
-        this.reset();
-      } catch (err) {
-        console.error(err);
-        alert('Gagal menyimpan data.');
-      }
-    });
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbznoZQwrC2j2OwjtGD5vophK88Ceeb9yUS_ud8drZFxd62Na1-sIzCgRGaczq-7ntA/exec', {
+        method: 'POST',
+        body: data,
+        mode: 'no-cors' // 💡 Ini penting untuk menghindari CORS error
+      });
+
+      alert('Data berhasil dikirim!');
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      alert('Gagal mengirim data');
+    }
+  });
   </script>
 </body>
 </html>
