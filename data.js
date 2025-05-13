@@ -16,10 +16,17 @@ function parseTanggalIndo(str) {
 }
 
 async function fetchData() {
-  const res = await fetch(SHEET_API_URL);
-  const json = await res.json();
-  return json.data || [];
+  try {
+    const res = await fetch(SHEET_API_URL);
+    const json = await res.json();
+    console.log('DATA DARI GOOGLE SHEETS:', json);
+    return json.data || [];
+  } catch (err) {
+    console.error('GAGAL FETCH DATA:', err);
+    return [];
+  }
 }
+
 
 function isDalamPeriodeSekarang(tanggal) {
   const today = new Date();
