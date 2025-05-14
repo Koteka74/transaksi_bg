@@ -69,9 +69,10 @@ function tampilkanTopPengeluaran(data) {
 async function tampilkanDataPeriodeBerjalan() {
   console.log("Menjalankan tampilkanDataPeriodeBerjalan()");
   const semuaData = await fetchData();
-  console.log("Data lengkap:", semuaData);
-  //const dataPeriode = semuaData.filter(row => isDalamPeriodeSekarang(row.Tanggal));
-  console.log("Data yang ditampilkan:", dataPeriode);
+
+  // untuk test: tampilkan semua data
+  const dataPeriode = semuaData;
+
   tampilkanTotalPengeluaran(dataPeriode);
   tampilkanTopPengeluaran(dataPeriode);
 }
