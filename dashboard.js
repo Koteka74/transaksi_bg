@@ -19,6 +19,7 @@ async function fetchData() {
   try {
     const res = await fetch(SHEET_API_URL);
     const json = await res.json();
+    console.log("Contoh data satu baris:", json.data?.[0]);
     console.log('DATA DARI GOOGLE SHEETS:', json);
     const debug = document.getElementById('debug');
     if (debug) debug.textContent = JSON.stringify(json.data, null, 2);
@@ -60,7 +61,8 @@ async function tampilkanDataPeriodeBerjalan() {
   console.log("Menjalankan tampilkanDataPeriodeBerjalan()");
   const semuaData = await fetchData();
   console.log("Data lengkap:", semuaData);
-  const dataPeriode = semuaData.filter(row => isDalamPeriodeSekarang(row.Tanggal));
+  //const dataPeriode = semuaData.filter(row => isDalamPeriodeSekarang(row.Tanggal));
+  console.log("Data yang ditampilkan:", dataPeriode);
   tampilkanTotalPengeluaran(dataPeriode);
   tampilkanTopPengeluaran(dataPeriode);
 }
