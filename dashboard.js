@@ -1,5 +1,5 @@
 // dashboard.js
-console.log("✅ dashboard.js berhasil dimuat");
+//console.log("✅ dashboard.js berhasil dimuat");
 
 const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwx88Y5tmOekoD5iD3cMQpMBWX0CotzGIgDm7aSEWMcJmg_OyqhKGuGXBIFeFjATGQ/exec';
 
@@ -77,7 +77,7 @@ async function tampilkanDataPeriodeBerjalan() {
   tampilkanTotalPengeluaran(dataPeriode);
   tampilkanTopPengeluaran(dataPeriode);
 }
-
+console.log("✅ dashboard.js berhasil dimuat");
 document.addEventListener('DOMContentLoaded', () => {
   console.log("Dashboard loaded");
   tampilkanDataPeriodeBerjalan();
