@@ -1,4 +1,5 @@
 // dashboard.js
+console.log("✅ dashboard.js berhasil dimuat");
 
 const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwx88Y5tmOekoD5iD3cMQpMBWX0CotzGIgDm7aSEWMcJmg_OyqhKGuGXBIFeFjATGQ/exec';
 
