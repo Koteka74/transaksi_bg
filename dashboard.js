@@ -31,14 +31,16 @@ async function fetchData() {
 }
 
 function isDalamPeriodeSekarang(tanggal) {
+  if (!tanggal) return false;
+
   const today = new Date();
   const periodeStart = new Date(today.getFullYear(), today.getMonth(), 17);
-  const periodeEnd = new Date(periodeStart);
-  periodeEnd.setMonth(periodeStart.getMonth() + 1);
-  periodeEnd.setDate(16);
-  const tgl = parseTanggalIndo(tanggal);
+  const periodeEnd = new Date(today.getFullYear(), today.getMonth() + 1, 16);
+
+  const tgl = new Date(tanggal); // langsung parse ISO date
   return tgl >= periodeStart && tgl <= periodeEnd;
 }
+
 
 function tampilkanTotalPengeluaran(data) {
   const total = data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
