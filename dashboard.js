@@ -21,8 +21,15 @@ async function fetchData() {
     const json = await res.json();
     console.log("Contoh data satu baris:", json.data?.[0]);
     console.log('DATA DARI GOOGLE SHEETS:', json);
+    // tampilkan data mentah langsung di elemen <pre id="debug">
     const debug = document.getElementById('debug');
-    if (debug) debug.textContent = JSON.stringify(json.data, null, 2);
+    if (debug) {
+      debug.textContent = JSON.stringify(json.data, null, 2);
+    }
+    
+    // tambahkan console log juga
+    console.log("Data mentah:", json.data);
+    
     return json.data || [];
   } catch (err) {
     console.error('GAGAL FETCH DATA:', err);
