@@ -55,6 +55,13 @@ function tampilkanData(data) {
   });
 }
 
+function tampilkanTotalPengeluaran(data) {
+  const total = data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
+  const el = document.getElementById('totalPengeluaran');
+  if (el) el.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+}
+
+
 function tampilkanTopPengeluaran(data) {
   const list = document.getElementById('topPengeluaran');
   const sorted = [...data].sort((a, b) => Number(b.Debet || 0) - Number(a.Debet || 0)).slice(0, 5);
@@ -71,6 +78,7 @@ async function tampilkanDataPeriodeBerjalan() {
   const dataPeriode = semuaData.filter(row => isDalamPeriodeSekarang(row.Tanggal));
   tampilkanData(dataPeriode);
   tampilkanTopPengeluaran(dataPeriode);
+  tampilkanTotalPengeluaran(dataPeriode); // 👈 tambahkan baris ini
 }
 
 document.addEventListener('DOMContentLoaded', tampilkanDataPeriodeBerjalan);
