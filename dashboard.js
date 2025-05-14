@@ -63,4 +63,7 @@ async function tampilkanDataPeriodeBerjalan() {
   tampilkanTopPengeluaran(dataPeriode);
 }
 
-document.addEventListener('DOMContentLoaded', tampilkanDataPeriodeBerjalan);
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("Dashboard loaded");
+  tampilkanDataPeriodeBerjalan();
+});
