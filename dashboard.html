@@ -44,6 +44,30 @@
   </div>
   <pre id="debug" class="text-sm bg-gray-100 p-4 rounded mt-4 overflow-auto max-h-80"></pre>
   <!-- Data JS -->
-  <script src="dashboard.js"></script>
+  <!-- <script src="dashboard.js"></script> -->
+  <script>
+    fetch('https://script.google.com/macros/s/AKfycbwbterqrFS_0xFZEZA2tG99IJR8MwtbxQxAq13N6gtisF14kPrwm4g1CgTxdNEXZL4/exec')
+      .then(res => res.json())
+      .then(json => {
+        console.log("✅ DATA API:", json);
+        document.getElementById('debug').textContent = JSON.stringify(json, null, 2);
+
+        // Hitung total
+        const total = json.data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
+        document.getElementById('totalPengeluaran').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+
+        // Top 5
+        const sorted = [...json.data].sort((a, b) => Number(b.Debet || 0) - Number(a.Debet || 0)).slice(0, 5);
+        const ul = document.getElementById('topPengeluaran');
+        ul.innerHTML = '';
+        sorted.forEach(row => {
+          const li = document.createElement('li');
+          li.textContent = `${row.Uraian} - Rp ${Number(row.Debet || 0).toLocaleString('id-ID')}`;
+          ul.appendChild(li);
+        });
+      })
+      .catch(err => console.error("❌ Gagal ambil data:", err));
+  </script>
+
 </body>
 </html>
