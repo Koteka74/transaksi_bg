@@ -1,6 +1,6 @@
 console.log("📦 dashboard.js dimuat");
 
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwbterqrFS_0xFZEZA2tG99IJR8MwtbxQxAq13N6gtisF14kPrwm4g1CgTxdNEXZL4/exec';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwx88Y5tmOekoD5iD3cMQpMBWX0CotzGIgDm7aSEWMcJmg_OyqhKGuGXBIFeFjATGQ/exec';
 
 async function fetchData() {
   try {
@@ -55,4 +55,8 @@ async function tampilkanDataPeriodeBerjalan() {
   tampilkanTopPengeluaran(semuaData);
 }
 
-document.addEventListener("DOMContentLoaded", tampilkanDataPeriodeBerjalan);
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("📦 DOM selesai dimuat, memuat dashboard...");
+  tampilkanDataPeriodeBerjalan();
+});
+
