@@ -8,8 +8,9 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- Sidebar -->
+  <!-- Layout Utama -->
   <div class="flex">
+    <!-- Sidebar -->
     <aside class="w-64 h-screen bg-blue-800 text-white p-6">
       <h1 class="text-2xl font-bold mb-6">Transaksi</h1>
       <nav>
@@ -21,53 +22,30 @@
       </nav>
     </aside>
 
-    <!-- Konten Utama -->
+    <!-- Konten -->
     <main class="flex-1 p-6 overflow-y-auto">
       <h2 class="text-2xl font-semibold mb-4">Dashboard Pengeluaran</h2>
 
-      <!-- Total Pengeluaran -->
+      <!-- Total -->
       <div class="bg-white p-4 rounded shadow mb-6">
         <h3 class="text-lg font-medium">Total Pengeluaran Bulan Ini</h3>
         <p class="text-3xl font-bold text-red-600 mt-2" id="totalPengeluaran">Rp 0</p>
       </div>
 
-      <!-- Top 5 Pengeluaran -->
-      <div class="bg-white p-4 rounded shadow">
+      <!-- Top 5 -->
+      <div class="bg-white p-4 rounded shadow mb-6">
         <h3 class="text-lg font-medium mb-3">Top 5 Pembelian Terbesar</h3>
         <ul id="topPengeluaran" class="list-disc list-inside text-gray-700 space-y-1">
           <li>Loading data...</li>
         </ul>
       </div>
-      <!-- Debug Output (opsional) -->
-      <!-- pre id="debug" class="text-xs text-gray-500 bg-gray-50 p-2 mt-6 rounded overflow-auto max-h-64"></pre> -->
+
+      <!-- Debug -->
+      <pre id="debug" class="text-xs text-gray-500 bg-gray-50 p-4 mt-6 rounded overflow-auto max-h-64"></pre>
     </main>
   </div>
-  <pre id="debug" class="text-sm bg-gray-100 p-4 rounded mt-4 overflow-auto max-h-80"></pre>
-  <!-- Data JS -->
-  <!-- <script src="dashboard.js"></script> -->
-  <script>
-    fetch('https://script.google.com/macros/s/AKfycbwbterqrFS_0xFZEZA2tG99IJR8MwtbxQxAq13N6gtisF14kPrwm4g1CgTxdNEXZL4/exec')
-      .then(res => res.json())
-      .then(json => {
-        console.log("✅ DATA API:", json);
-        document.getElementById('debug').textContent = JSON.stringify(json, null, 2);
 
-        // Hitung total
-        const total = json.data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
-        document.getElementById('totalPengeluaran').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-
-        // Top 5
-        const sorted = [...json.data].sort((a, b) => Number(b.Debet || 0) - Number(a.Debet || 0)).slice(0, 5);
-        const ul = document.getElementById('topPengeluaran');
-        ul.innerHTML = '';
-        sorted.forEach(row => {
-          const li = document.createElement('li');
-          li.textContent = `${row.Uraian} - Rp ${Number(row.Debet || 0).toLocaleString('id-ID')}`;
-          ul.appendChild(li);
-        });
-      })
-      .catch(err => console.error("❌ Gagal ambil data:", err));
-  </script>
-
+  <!-- Script -->
+  <script src="dashboard.js"></script>
 </body>
 </html>
