@@ -4,48 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Pengeluaran</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-800">
-
-  <!-- Layout Utama -->
-  <div class="flex">
+  <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 h-screen bg-blue-800 text-white p-6">
-      <h1 class="text-2xl font-bold mb-6">Transaksi</h1>
-      <nav>
-        <ul class="space-y-4">
-          <li><a href="dashboard.html" class="hover:underline">Dashboard</a></li>
-          <li><a href="data.html" class="hover:underline">Data Pembelian</a></li>
-          <li><a href="input.html" class="hover:underline">Input Pembelian</a></li>
-        </ul>
+    <aside class="w-64 bg-blue-900 text-white p-4 hidden md:block" id="sidebar">
+      <h2 class="text-2xl font-bold mb-6">Transaksi</h2>
+      <nav class="space-y-4">
+        <a href="index.html" class="block hover:text-blue-300">Dashboard</a>
+        <a href="data.html" class="block hover:text-blue-300">Data Pembelian</a>
+        <a href="input.html" class="block hover:text-blue-300">Input Pembelian</a>
       </nav>
     </aside>
 
-    <!-- Konten -->
-    <main class="flex-1 p-6 overflow-y-auto">
-      <h2 class="text-2xl font-semibold mb-4">Dashboard Pengeluaran</h2>
+    <!-- Hamburger for mobile -->
+    <button class="absolute top-4 left-4 md:hidden text-blue-900" onclick="toggleSidebar()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
-      <!-- Total -->
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h3 class="text-lg font-medium">Total Pengeluaran Bulan Ini</h3>
-        <p class="text-3xl font-bold text-red-600 mt-2" id="totalPengeluaran">Rp 0</p>
+    <!-- Main content -->
+    <main class="flex-1 p-4 space-y-4">
+      <h1 class="text-2xl font-bold">Dashboard Pengeluaran</h1>
+
+      <!-- Label Periode dan Filter -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h2 id="labelPeriode" class="text-sm font-medium text-gray-600"></h2>
+        <div class="flex items-center gap-2">
+          <select id="pilihPeriode" class="border rounded px-2 py-1 text-sm">
+            <option value="semua">Semua Periode</option>
+            <option value="2025-04">April - Mei 2025</option>
+            <option value="2025-05">Mei - Juni 2025</option>
+          </select>
+          <button id="tombolUrut" class="text-gray-600 hover:text-blue-600" title="Urut Abjad / Jumlah">
+            <i data-lucide="sort-asc"></i>
+          </button>
+        </div>
       </div>
 
-      <!-- Top 5 -->
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h3 class="text-lg font-medium mb-3">Top 5 Pembelian Terbesar</h3>
-        <ul id="topPengeluaran" class="list-disc list-inside text-gray-700 space-y-1">
-          <li>Loading data...</li>
-        </ul>
+      <!-- Info Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <h2 id="labelJudulPengeluaran" class="font-medium mb-2">Total Pengeluaran Bulan Ini</h2>
+          <p id="totalPengeluaran" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="font-medium mb-2">Saldo Kas Sekarang</h2>
+          <p id="saldoKas" class="text-2xl font-bold text-green-600">Rp 0</p>
+        </div>
       </div>
 
-      <!-- Debug -->
-      <pre id="debug" class="text-xs text-gray-500 bg-gray-50 p-4 mt-6 rounded overflow-auto max-h-64"></pre>
+      <div class="bg-white p-4 rounded shadow">
+        <h2 class="font-medium mb-2">Rekap Pembelian Tertinggi</h2>
+        <ul id="rekapPembelian" class="list-disc list-inside space-y-1 text-sm"></ul>
+      </div>
     </main>
   </div>
 
-  <!-- Script -->
   <script src="dashboard.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("hidden");
+    }
+    lucide.createIcons();
+  </script>
 </body>
 </html>
