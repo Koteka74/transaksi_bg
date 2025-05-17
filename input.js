@@ -1,6 +1,4 @@
-// input.js – POST JSON ke Apps Script dari Vercel (normal mode)
-
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzGmHEdMVkuBERtWNorwo33ylLJrnHjfh29_MhFHEMSmu1BL9HnEcRdRBU_N8AugL4/exec';
+const SHEET_API_URL = '/api/proxy';
 
 document.getElementById("formTransaksi").addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -33,16 +31,16 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       body: JSON.stringify(data)
     });
 
-    const hasil = await res.text();
+    const hasil = await res.json();
     console.log("✅ Respons:", hasil);
 
-    if (hasil.includes("SUKSES")) {
+    if (hasil.result.includes("SUKSES")) {
       document.getElementById("formTransaksi").reset();
       const notif = document.getElementById("notif");
       notif.classList.remove("hidden");
       setTimeout(() => notif.classList.add("hidden"), 3000);
     } else {
-      alert("Gagal simpan: " + hasil);
+      alert("Gagal simpan: " + hasil.result);
     }
 
   } catch (err) {
