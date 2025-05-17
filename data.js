@@ -1,110 +1,120 @@
-// data.js
+// data.js – Tambahan: Filter Tanggal, Periode 17–18, dan Pencarian Uraian
 
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwbterqrFS_0xFZEZA2tG99IJR8MwtbxQxAq13N6gtisF14kPrwm4g1CgTxdNEXZL4/exec?token=RAHASIA123'; // ganti dengan URL Web App Anda
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzGmHEdMVkuBERtWNorwo33ylLJrnHjfh29_MhFHEMSmu1BL9HnEcRdRBU_N8AugL4/exec';
+let semuaData = [];
 
-function formatTanggalIndo(tgl) {
-  const d = new Date(tgl);
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const yyyy = d.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
-}
-
-function parseTanggalIndo(str) {
-  const [dd, mm, yyyy] = str.split('/');
-  return new Date(`${yyyy}-${mm}-${dd}`);
-}
-
-async function fetchData() {
+async function ambilData() {
   try {
     const res = await fetch(SHEET_API_URL);
     const json = await res.json();
-    console.log('DATA DARI GOOGLE SHEETS:', json);
-    return json.data || [];
+    console.log("✅ Data diterima:", json.data);
+    semuaData = json.data || [];
+    tampilkanTabel(semuaData);
   } catch (err) {
-    console.error('GAGAL FETCH DATA:', err);
-    return [];
+    console.error("❌ Gagal ambil data:", err);
+    semuaData = [];
   }
 }
 
-
-function isDalamPeriodeSekarang(tanggal) {
-  const today = new Date();
-  const periodeStart = new Date(today.getFullYear(), today.getMonth(), 17);
-  const periodeEnd = new Date(periodeStart);
-  periodeEnd.setMonth(periodeStart.getMonth() + 1);
-  periodeEnd.setDate(16);
-  const tgl = parseTanggalIndo(tanggal);
-  return tgl >= periodeStart && tgl <= periodeEnd;
+function formatTanggalIndo(tanggalISO) {
+  const d = new Date(tanggalISO);
+  return isNaN(d) ? "-" : d.toLocaleDateString('id-ID');
 }
 
-function tampilkanData(data) {
-  const tbody = document.getElementById('tabelData');
-  tbody.innerHTML = '';
+function tampilkanTabel(data) {
+  const container = document.getElementById("dataContainer");
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p class='text-gray-500'>Tidak ada data tersedia.</p>";
+    return;
+  }
+
+  const tabel = document.createElement("table");
+  tabel.className = "w-full text-sm text-left text-gray-700 border border-gray-200";
+
+  const thead = document.createElement("thead");
+  thead.className = "bg-gray-200 text-xs uppercase text-gray-600";
+  thead.innerHTML = `
+    <tr>
+      <th class='px-2 py-1'>Tanggal</th>
+      <th class='px-2 py-1'>Uraian</th>
+      <th class='px-2 py-1'>Debet</th>
+      <th class='px-2 py-1'>Kredit</th>
+      <th class='px-2 py-1'>Saldo</th>
+      <th class='px-2 py-1'>Keterangan</th>
+    </tr>
+  `;
+
+  const tbody = document.createElement("tbody");
   data.forEach(row => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement("tr");
+    tr.className = "border-t";
     tr.innerHTML = `
-      <td class="px-4 py-2">${row.Tanggal}</td>
-      <td class="px-4 py-2">${row.Uraian}</td>
-      <td class="px-4 py-2 text-right">Rp ${Number(row.Debet || 0).toLocaleString('id-ID')}</td>
-      <td class="px-4 py-2 text-right">Rp ${Number(row.Kredit || 0).toLocaleString('id-ID')}</td>
-      <td class="px-4 py-2 text-right">Rp ${Number(row.Saldo || 0).toLocaleString('id-ID')}</td>
-      <td class="px-4 py-2">${row.Keterangan || ''}</td>
+      <td class='px-2 py-1'>${formatTanggalIndo(row.Tanggal)}</td>
+      <td class='px-2 py-1'>${row.Uraian || ""}</td>
+      <td class='px-2 py-1'>${Number(row.Debet || 0).toLocaleString('id-ID')}</td>
+      <td class='px-2 py-1'>${Number(row.Kredit || 0).toLocaleString('id-ID')}</td>
+      <td class='px-2 py-1'>${Number((row.Saldo || "0").toString().replace(/\./g, "")).toLocaleString('id-ID')}</td>
+      <td class='px-2 py-1'>${row.Keterangan || ""}</td>
     `;
     tbody.appendChild(tr);
   });
+
+  tabel.appendChild(thead);
+  tabel.appendChild(tbody);
+
+  container.innerHTML = "";
+  container.appendChild(tabel);
 }
 
-function tampilkanTotalPengeluaran(data) {
-  const total = data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
-  const el = document.getElementById('totalPengeluaran');
-  if (el) el.textContent = `Rp ${total.toLocaleString('id-ID')}`;
-}
+function filterData() {
+  const tglAwal = document.getElementById("filterTanggalAwal").value;
+  const tglAkhir = document.getElementById("filterTanggalAkhir").value;
+  const periode = document.getElementById("filterPeriode").value;
+  const kata = document.getElementById("filterUraian").value.toLowerCase();
 
+  let hasil = semuaData.filter(row => {
+    if (!row.Tanggal) return false;
+    const tgl = new Date(row.Tanggal);
+    if (isNaN(tgl)) return false;
 
-function tampilkanTopPengeluaran(data) {
-  const list = document.getElementById('topPengeluaran');
-  const sorted = [...data].sort((a, b) => Number(b.Debet || 0) - Number(a.Debet || 0)).slice(0, 5);
-  list.innerHTML = '';
-  sorted.forEach(row => {
-    const li = document.createElement('li');
-    li.textContent = `${row.Uraian} - Rp ${Number(row.Debet || 0).toLocaleString('id-ID')}`;
-    list.appendChild(li);
+    // Filter berdasarkan rentang tanggal
+    if (tglAwal && tglAkhir) {
+      const start = new Date(tglAwal);
+      const end = new Date(tglAkhir);
+      if (tgl < start || tgl > end) return false;
+    }
+
+    // Filter berdasarkan periode tanggal 17
+    if (periode && periode !== "semua") {
+      const [year, month] = periode.split("-").map(Number);
+      const start = new Date(year, month - 1, 18);
+      const end = new Date(year, month, 17, 23, 59, 59);
+      if (tgl < start || tgl > end) return false;
+    }
+
+    // Filter berdasarkan kata uraian
+    if (kata && !row.Uraian?.toLowerCase().includes(kata)) return false;
+
+    return true;
   });
+
+  tampilkanTabel(hasil);
 }
 
-async function tampilkanDataPeriodeBerjalan() {
-  const semuaData = await fetchData();
-  const dataPeriode = semuaData.filter(row => isDalamPeriodeSekarang(row.Tanggal));
-  tampilkanData(dataPeriode);
-  tampilkanTopPengeluaran(dataPeriode);
-  tampilkanTotalPengeluaran(dataPeriode); // 👈 tambahkan baris ini
-}
+// Jalankan saat halaman siap
+window.addEventListener("DOMContentLoaded", async () => {
+  await ambilData();
+  tampilkanTabel(semuaData);
 
-document.addEventListener('DOMContentLoaded', tampilkanDataPeriodeBerjalan);
-
-async function filterData() {
-  const tanggal = document.getElementById('filterTanggal').value;
-  const awal = document.getElementById('filterAwal').value;
-  const akhir = document.getElementById('filterAkhir').value;
-
-  const semuaData = await fetchData();
-  let hasil = semuaData;
-
-  if (tanggal) {
-    const tglIndo = formatTanggalIndo(tanggal);
-    hasil = hasil.filter(row => row.Tanggal === tglIndo);
-  }
-
-  if (awal && akhir) {
-    const awalDate = new Date(awal);
-    const akhirDate = new Date(akhir);
-    hasil = hasil.filter(row => {
-      const tgl = parseTanggalIndo(row.Tanggal);
-      return tgl >= awalDate && tgl <= akhirDate;
-    });
-  }
-
-  tampilkanData(hasil);
-  tampilkanTopPengeluaran(hasil);
-}
+  document.getElementById("filterTanggalAwal").addEventListener("change", filterData);
+  document.getElementById("filterTanggalAkhir").addEventListener("change", filterData);
+  document.getElementById("filterPeriode").addEventListener("change", filterData);
+  document.getElementById("filterUraian").addEventListener("input", filterData);
+document.getElementById("resetFilter").addEventListener("click", () => {
+  document.getElementById("filterTanggalAwal").value = "";
+  document.getElementById("filterTanggalAkhir").value = "";
+  document.getElementById("filterPeriode").value = "semua";
+  document.getElementById("filterUraian").value = "";
+  tampilkanTabel(semuaData);
+});
+});
