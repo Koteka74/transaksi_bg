@@ -1,77 +1,78 @@
-<!-- data.html (Data Pembelian) -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Pembelian Bahan Baku</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Pembelian</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg p-4">
-      <h2 class="text-2xl font-bold mb-6">Pengeluaran</h2>
-      <nav>
-        <ul class="space-y-4">
-          <li><a href="index.html" class="hover:text-blue-600">Dashboard</a></li>
-          <li><a href="input.html" class="hover:text-blue-600">Input Bahan Baku</a></li>
-          <li><a href="data.html" class="text-blue-600 font-semibold">Data Pembelian</a></li>
-        </ul>
+      <aside class="w-64 bg-blue-900 text-white p-4 hidden md:block" id="sidebar">
+      <h2 class="text-2xl font-bold mb-6 ml-8">Menu</h2>
+      <nav class="space-y-4">
+        <a href="index.html" class="block hover:text-blue-300" onclick="toggleSidebar()">Dashboard</a>
+        <a href="data.html" class="block hover:text-blue-300 font-bold">Data Pembelian</a>
+        <a href="input.html" class="block hover:text-blue-300" onclick="toggleSidebar()">Input Pembelian</a>
       </nav>
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 space-y-6">
-      <h1 class="text-3xl font-bold mb-4">Data Pembelian</h1>
+    <!-- Tombol hamburger -->
+    <button class="absolute top-4 left-4 md:hidden text-gray-800 rounded p-1 shadow z-50" onclick="toggleSidebar()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
-      <!-- Filter Tanggal -->
-      <div class="bg-white p-4 rounded shadow space-y-4">
-        <h2 class="text-lg font-semibold">Filter Data</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block font-medium">Tanggal</label>
-            <input type="date" id="filterTanggal" class="mt-1 block w-full border border-gray-300 rounded p-2">
+    <!-- Konten utama -->
+    <main class="flex-1 p-4 space-y-4">
+      <h1 class="text-2xl font-bold ml-10 md:ml-0">Data Pembelian</h1>
+
+      <div class="bg-white p-4 rounded shadow">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+          <p class="text-sm text-gray-500">Tampilkan data pembelian per periode:</p>
+          <button id="resetFilter" class="mt-2 md:mt-0 bg-gray-200 hover:bg-gray-300 text-sm px-3 py-1 rounded">Reset Filter</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+          <div class="sm:col-span-2 flex gap-2">
+            <div class="w-1/2">
+              <label class="text-sm text-gray-600">Tanggal Awal</label>
+              <input type="date" id="filterTanggalAwal" class="w-full border px-2 py-1 rounded text-sm" />
+            </div>
+            <div class="w-1/2">
+              <label class="text-sm text-gray-600">Tanggal Akhir</label>
+              <input type="date" id="filterTanggalAkhir" class="w-full border px-2 py-1 rounded text-sm" />
+            </div>
           </div>
           <div>
-            <label class="block font-medium">Rentang Awal</label>
-            <input type="date" id="filterAwal" class="mt-1 block w-full border border-gray-300 rounded p-2">
+            <label class="text-sm text-gray-600">Periode (18–17)</label>
+            <select id="filterPeriode" class="w-full border px-2 py-1 rounded text-sm">
+              <option value="semua">Semua</option>
+              <option value="2025-04">April - Mei 2025</option>
+              <option value="2025-05">Mei - Juni 2025</option>
+            </select>
           </div>
           <div>
-            <label class="block font-medium">Rentang Akhir</label>
-            <input type="date" id="filterAkhir" class="mt-1 block w-full border border-gray-300 rounded p-2">
-          </div>
-          <div class="flex items-end">
-            <button onclick="filterData()" class="bg-blue-600 text-white px-4 py-2 rounded">Terapkan Filter</button>
+            <label class="text-sm text-gray-600">Cari Uraian</label>
+            <input type="text" id="filterUraian" class="w-full border px-2 py-1 rounded text-sm" placeholder="Contoh: Cabe, Minyak..." />
           </div>
         </div>
-      </div>
 
-      <!-- Tabel Data -->
-      <div class="bg-white p-4 rounded shadow overflow-auto">
-        <table class="min-w-full table-auto">
-          <thead class="bg-blue-100">
-            <tr>
-              <th class="px-4 py-2 text-left">Tanggal</th>
-              <th class="px-4 py-2 text-left">Uraian</th>
-              <th class="px-4 py-2 text-right">Debet</th>
-              <th class="px-4 py-2 text-right">Kredit</th>
-              <th class="px-4 py-2 text-right">Saldo</th>
-              <th class="px-4 py-2 text-left">Keterangan</th>
-            </tr>
-          </thead>
-          <tbody id="tabelData" class="text-sm"></tbody>
-        </table>
-      </div>
-
-      <!-- Rekap Tertinggi -->
-      <div class="bg-white p-4 rounded shadow">
-        <h2 class="text-lg font-semibold mb-2">Top Pengeluaran</h2>
-        <ul id="topPengeluaran" class="list-disc list-inside text-gray-700"></ul>
+        <div id="dataContainer">Memuat data...</div>
       </div>
     </main>
   </div>
 
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("hidden");
+    }
+    lucide.createIcons();
+  </script>
   <script src="data.js"></script>
 </body>
 </html>
