@@ -1,4 +1,4 @@
-// input.js – Versi tanpa CORS error (pakai FormData + no-cors)
+// input.js – POST JSON ke Apps Script dari Vercel (normal mode)
 
 const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzGmHEdMVkuBERtWNorwo33ylLJrnHjfh29_MhFHEMSmu1BL9HnEcRdRBU_N8AugL4/exec';
 
@@ -16,24 +16,35 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
     return;
   }
 
-  const formData = new FormData();
-  formData.append("Tanggal", tanggal);
-  formData.append("Uraian", uraian);
-  formData.append("Debet", jenis === "pengeluaran" ? jumlah : "");
-  formData.append("Kredit", jenis === "penerimaan" ? jumlah : "");
-  formData.append("Keterangan", keterangan);
+  const data = {
+    Tanggal: tanggal,
+    Uraian: uraian,
+    Debet: jenis === "pengeluaran" ? jumlah : "",
+    Kredit: jenis === "penerimaan" ? jumlah : "",
+    Keterangan: keterangan
+  };
 
   try {
-    await fetch(SHEET_API_URL, {
+    const res = await fetch(SHEET_API_URL, {
       method: "POST",
-      mode: "no-cors",
-      body: formData
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
     });
 
-    document.getElementById("formTransaksi").reset();
-    const notif = document.getElementById("notif");
-    notif.classList.remove("hidden");
-    setTimeout(() => notif.classList.add("hidden"), 3000);
+    const hasil = await res.text();
+    console.log("✅ Respons:", hasil);
+
+    if (hasil.includes("SUKSES")) {
+      document.getElementById("formTransaksi").reset();
+      const notif = document.getElementById("notif");
+      notif.classList.remove("hidden");
+      setTimeout(() => notif.classList.add("hidden"), 3000);
+    } else {
+      alert("Gagal simpan: " + hasil);
+    }
+
   } catch (err) {
     console.error("❌ Error simpan:", err);
     alert("Gagal mengirim data.");
