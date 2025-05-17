@@ -1,6 +1,4 @@
-// dashboard.js FINAL – PERIODE 18 - 17 BULAN BERIKUTNYA + FILTER PERIODE & REKAP TOTAL PER ITEM
-
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwx88Y5tmOekoD5iD3cMQpMBWX0CotzGIgDm7aSEWMcJmg_OyqhKGuGXBIFeFjATGQ/exec';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzGmHEdMVkuBERtWNorwo33ylLJrnHjfh29_MhFHEMSmu1BL9HnEcRdRBU_N8AugL4/exec';
 
 let semuaData = [];
 let urutAbjad = false;
@@ -11,8 +9,7 @@ async function fetchData() {
     const json = await res.json();
     console.log("✅ Data berhasil diambil:", json.data);
     semuaData = json.data || [];
-    
-    filterDanTampilkan();
+    filterDanTampilkan(); // otomatis jalankan filter awal
     tampilkanSaldoKas(semuaData);
   } catch (err) {
     console.error("❌ Gagal fetch:", err);
@@ -27,7 +24,6 @@ function tampilkanPeriode(start, end) {
   const judul = document.getElementById("labelJudulPengeluaran");
   if (judul) judul.textContent = `Total Pengeluaran Periode`;
 }
-
 
 function filterDanTampilkan() {
   const filter = document.getElementById("pilihPeriode").value;
@@ -46,30 +42,18 @@ function filterDanTampilkan() {
   } else {
     start = new Date(filter + "-18T00:00:00");
     end = new Date(start.getFullYear(), start.getMonth() + 1, 17, 23, 59, 59);
-
-    console.log("📆 Periode filter:", start.toISOString(), "s.d.", end.toISOString());
-
     data = semuaData.filter(row => {
       if (!row.Tanggal) return false;
-
       const d = new Date(row.Tanggal);
       if (isNaN(d)) return false;
-
-      console.log("✅ Cek row valid:", row.Tanggal, "→", d.toISOString());
       return d >= start && d <= end;
     });
-
-
     tampilkanPeriode(start, end);
   }
-
-  console.log("✅ Jumlah data hasil filter:", data.length);
 
   tampilkanTotalPengeluaran(data);
   tampilkanRekapTotalPerItem(data);
 }
-
-
 
 function tampilkanTotalPengeluaran(data) {
   const total = data.reduce((sum, row) => sum + Number(row.Debet || 0), 0);
@@ -78,7 +62,6 @@ function tampilkanTotalPengeluaran(data) {
 }
 
 function tampilkanSaldoKas(data) {
-  if (!data || data.length === 0) return;
   const lastValid = [...data].reverse().find(row => {
     const val = row.Saldo;
     return val !== undefined && val !== null && val.toString().trim() !== "";
@@ -93,20 +76,17 @@ function tampilkanSaldoKas(data) {
 function tampilkanRekapTotalPerItem(data) {
   const list = document.getElementById("rekapPembelian");
   const rekap = {};
-
   data.forEach(row => {
     const nama = row.Uraian || "(Tanpa nama)";
     const debet = Number(row.Debet || 0);
     rekap[nama] = (rekap[nama] || 0) + debet;
   });
-
   let hasil = Object.entries(rekap);
   if (urutAbjad) {
     hasil.sort((a, b) => a[0].localeCompare(b[0]));
   } else {
     hasil.sort((a, b) => b[1] - a[1]);
   }
-
   list.innerHTML = '';
   hasil.slice(0, 10).forEach(([nama, total]) => {
     const li = document.createElement("li");
