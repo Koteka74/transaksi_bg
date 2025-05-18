@@ -1,4 +1,4 @@
-// input.js – Final versi dengan notifikasi benar + format angka input
+// input.js – Final versi dengan toggle hamburger + input transaksi
 
 const SHEET_API_URL = '/api/proxy';
 
@@ -59,7 +59,7 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
 // Format angka saat diketik di input jumlah
 const jumlahInput = document.getElementById("jumlah");
 jumlahInput.addEventListener("input", function () {
-  const raw = this.value.replace(/\D/g, ""); // Hapus semua non-digit
+  const raw = this.value.replace(/\D/g, "");
   if (raw) {
     try {
       this.value = parseInt(raw).toLocaleString("id-ID");
@@ -72,4 +72,20 @@ jumlahInput.addEventListener("input", function () {
   }
 });
 
+// Toggle sidebar hamburger menu
+document.addEventListener("DOMContentLoaded", function () {
+  const toggle = document.getElementById("menu-toggle");
+  const sidebar = document.getElementById("sidebar");
 
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+
+    document.querySelectorAll("#sidebar a").forEach(link => {
+      link.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+      });
+    });
+  }
+});
