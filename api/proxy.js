@@ -16,8 +16,9 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     });
 
-    const text = await googleRes.text();
-    return res.status(200).json({ result: text });
+    const json = await googleRes.json(); // ubah jadi JSON langsung
+    return res.status(200).json(json);   // jangan bungkus ulang
+
   } catch (error) {
     return res.status(500).json({ error: "Gagal kirim ke Google Apps Script", detail: error.message });
   }
