@@ -116,7 +116,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("filterPeriode").value = "semua";
   document.getElementById("filterUraian").value = "";
   tampilkanTabel(semuaData);
-
+});
   const toggle = document.getElementById("menu-toggle");
   const sidebar = document.getElementById("sidebar");
 
@@ -132,5 +132,4 @@ window.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
-});
 });
