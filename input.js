@@ -59,10 +59,16 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
 // Format angka saat diketik di input jumlah
 const jumlahInput = document.getElementById("jumlah");
 jumlahInput.addEventListener("input", function () {
-  const raw = jumlahInput.value.replace(/\D/g, "");
+  const raw = this.value.replace(/\D/g, ""); // Hapus semua non-digit
   if (raw) {
-    jumlahInput.value = Number(raw).toLocaleString("id-ID");
+    try {
+      this.value = parseInt(raw).toLocaleString("id-ID");
+    } catch (e) {
+      console.error("Format error:", e);
+      this.value = "";
+    }
   } else {
-    jumlahInput.value = "";
+    this.value = "";
   }
 });
+
