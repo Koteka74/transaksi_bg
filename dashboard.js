@@ -104,4 +104,20 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchData();
   document.getElementById("pilihPeriode").addEventListener("change", filterDanTampilkan);
   document.getElementById("tombolUrut").addEventListener("click", toggleUrutan);
+
+  const toggle = document.getElementById("menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+
+    // Tutup sidebar otomatis setelah klik link menu (mobile)
+    document.querySelectorAll("#sidebar a").forEach(link => {
+      link.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+      });
+    });
+  }
 });
