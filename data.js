@@ -110,11 +110,27 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("filterTanggalAkhir").addEventListener("change", filterData);
   document.getElementById("filterPeriode").addEventListener("change", filterData);
   document.getElementById("filterUraian").addEventListener("input", filterData);
-document.getElementById("resetFilter").addEventListener("click", () => {
+  document.getElementById("resetFilter").addEventListener("click", () => {
   document.getElementById("filterTanggalAwal").value = "";
   document.getElementById("filterTanggalAkhir").value = "";
   document.getElementById("filterPeriode").value = "semua";
   document.getElementById("filterUraian").value = "";
   tampilkanTabel(semuaData);
+
+  const toggle = document.getElementById("menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+
+    // Tutup sidebar otomatis setelah klik link menu (mobile)
+    document.querySelectorAll("#sidebar a").forEach(link => {
+      link.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+      });
+    });
+  }
 });
 });
