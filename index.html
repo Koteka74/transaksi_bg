@@ -11,21 +11,29 @@
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-blue-900 text-white p-4 hidden md:block" id="sidebar">
-      <h2 class="text-2xl font-bold mb-6 ml-8">Menu</h2>
-      <nav class="space-y-4">
-        <a href="index.html" class="block hover:text-blue-300 font-bold" onclick="toggleSidebar()">Dashboard</a>
-        <a href="data.html" class="block hover:text-blue-300" onclick="toggleSidebar()">Data Pembelian</a>
-        <a href="input.html" class="block hover:text-blue-300" onclick="toggleSidebar()">Input Pembelian</a>
+    <aside id="sidebar"
+      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+      <div class="p-4 border-b border-blue-700">
+        <h2 class="text-xl font-bold pl-1">Menu</h2>
+      </div>
+      <nav class="p-4 space-y-4">
+        <a href="index.html" class="block hover:text-blue-200 font-medium">🏠 Dashboard</a>
+        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
+        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
       </nav>
     </aside>
 
-    <!-- Hamburger for mobile -->
-    <button class="absolute top-4 left-4 md:hidden text-blue-900" onclick="toggleSidebar()">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col">
+      <!-- Topbar mobile -->
+      <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
+        <button id="menu-toggle" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <span class="text-lg font-semibold pl-2">Menu</span>
+      </header>
 
     <!-- Main content -->
     <main class="flex-1 p-4 space-y-4">
