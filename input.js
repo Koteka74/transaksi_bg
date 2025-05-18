@@ -34,7 +34,7 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
     const hasil = await res.json();
     console.log("✅ Respons:", hasil);
 
-    if (hasil.result.includes("SUKSES")) {
+    if (hasil.result === "success") {
       document.getElementById("formTransaksi").reset();
       const notif = document.getElementById("notif");
       notif.classList.remove("hidden");
