@@ -14,6 +14,11 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
     return;
   }
 
+  if (!Number.isInteger(Number(jumlah))) {
+    alert("Jumlah harus berupa angka bulat.");
+    return;
+  }
+
   const data = {
     Tanggal: tanggal,
     Uraian: uraian,
