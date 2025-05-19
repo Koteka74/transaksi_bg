@@ -5,7 +5,7 @@ const SHEET_API_URL = '/api/proxy';
 // Fungsi untuk ambil data saran dari sheet NamaBahan
 async function loadAutocompleteUraian() {
   try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbztF1I4r-Ti59X-QfrxwNTElYeNqm16hqprbLuujY1ua7EI5hMia0aeHHyH0IIXYM8/exec?sheet=NamaBahan");
+    const res = await fetch("https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec?sheet=NamaBahan");
     const json = await res.json();
     const list = json.data || [];
     const datalist = document.getElementById("listUraian");
