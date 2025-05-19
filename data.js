@@ -29,8 +29,13 @@ function tampilkanTabel(data) {
 
   data.forEach(row => {
     const tr = document.createElement("tr");
+
+    const tanggalFormatted = row.Tanggal
+      ? new Date(row.Tanggal).toLocaleDateString("id-ID")
+      : "";
+    
     tr.innerHTML = `
-      <td class="border px-2 py-1 text-sm">${row.Tanggal || ""}</td>
+      <td class="border px-2 py-1 text-sm">${tanggalFormatted}</td>
       <td class="border px-2 py-1 text-sm">${row.Uraian || ""}</td>
       <td class="border px-2 py-1 text-sm text-right">${formatRupiah(row.Debet)}</td>
       <td class="border px-2 py-1 text-sm text-right">${formatRupiah(row.Kredit)}</td>
