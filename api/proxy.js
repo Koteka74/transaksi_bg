@@ -1,7 +1,7 @@
 // api/proxy.js
 
 export default async function handler(req, res) {
-  const url = "https://script.google.com/macros/s/AKfycbztF1I4r-Ti59X-QfrxwNTElYeNqm16hqprbLuujY1ua7EI5hMia0aeHHyH0IIXYM8/exec";
+  const url = "https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec";
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
