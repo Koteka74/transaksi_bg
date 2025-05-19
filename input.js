@@ -2,6 +2,23 @@
 
 const SHEET_API_URL = '/api/proxy';
 
+// Fungsi untuk ambil data saran dari sheet NamaBahan
+async function loadAutocompleteUraian() {
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbzGmHEdMVkuBERtWNorwo33ylLJrnHjfh29_MhFHEMSmu1BL9HnEcRdRBU_N8AugL4/exec?sheet=NamaBahan");
+    const json = await res.json();
+    const list = json.data || [];
+    const datalist = document.getElementById("listUraian");
+    list.forEach(item => {
+      const option = document.createElement("option");
+      option.value = item.Nama || item.nama || item;
+      datalist.appendChild(option);
+    });
+  } catch (err) {
+    console.error("❌ Gagal load NamaBahan:", err);
+  }
+}
+
 document.getElementById("formTransaksi").addEventListener("submit", async function (e) {
   e.preventDefault();
 
