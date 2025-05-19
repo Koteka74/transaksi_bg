@@ -53,7 +53,7 @@ function tampilkanTabel(data) {
   totalRow.innerHTML = `
     <td colspan="2" class="bg-blue-200 text-white font-bold px-2 py-2 text-right">Jumlah</td>
     <td class="bg-blue-200 text-white font-bold px-2 py-2 text-right">${formatRupiah(total)}</td>
-    <td colspan="3" class="bg-blue-200"></td>
+    <td colspan="3" class="bg-blue-700"></td>
   `;
   tbody.appendChild(totalRow);
 }
