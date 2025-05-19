@@ -22,49 +22,37 @@ function formatTanggalIndo(tanggalISO) {
 }
 
 function tampilkanTabel(data) {
-  const container = document.getElementById("dataContainer");
-  if (!data || data.length === 0) {
-    container.innerHTML = "<p class='text-gray-500'>Tidak ada data tersedia.</p>";
-    return;
-  }
+  const tbody = document.querySelector("#tabelData tbody");
+  tbody.innerHTML = "";
 
-  const tabel = document.createElement("table");
-  tabel.className = "w-full text-sm text-left text-gray-700 border border-gray-200";
+  let total = 0;
 
-  const thead = document.createElement("thead");
-  thead.className = "bg-gray-200 text-xs uppercase text-gray-600";
-  thead.innerHTML = `
-    <tr>
-      <th class='px-2 py-1'>Tanggal</th>
-      <th class='px-2 py-1'>Uraian</th>
-      <th class='px-2 py-1'>Debet</th>
-      <th class='px-2 py-1'>Kredit</th>
-      <th class='px-2 py-1'>Saldo</th>
-      <th class='px-2 py-1'>Keterangan</th>
-    </tr>
-  `;
-
-  const tbody = document.createElement("tbody");
   data.forEach(row => {
     const tr = document.createElement("tr");
-    tr.className = "border-t";
     tr.innerHTML = `
-      <td class='px-2 py-1'>${formatTanggalIndo(row.Tanggal)}</td>
-      <td class='px-2 py-1'>${row.Uraian || ""}</td>
-      <td class='px-2 py-1'>${Number(row.Debet || 0).toLocaleString('id-ID')}</td>
-      <td class='px-2 py-1'>${Number(row.Kredit || 0).toLocaleString('id-ID')}</td>
-      <td class='px-2 py-1'>${Number((row.Saldo || "0").toString().replace(/\./g, "")).toLocaleString('id-ID')}</td>
-      <td class='px-2 py-1'>${row.Keterangan || ""}</td>
+      <td class="border px-2 py-1 text-sm">${row.Tanggal || ""}</td>
+      <td class="border px-2 py-1 text-sm">${row.Uraian || ""}</td>
+      <td class="border px-2 py-1 text-sm text-right">${formatRupiah(row.Debet)}</td>
+      <td class="border px-2 py-1 text-sm text-right">${formatRupiah(row.Kredit)}</td>
+      <td class="border px-2 py-1 text-sm text-right">${formatRupiah(row.Saldo)}</td>
+      <td class="border px-2 py-1 text-sm">${row.Keterangan || ""}</td>
     `;
     tbody.appendChild(tr);
+
+    const debet = parseInt((row.Debet || "0").toString().replace(/\D/g, "")) || 0;
+    total += debet;
   });
 
-  tabel.appendChild(thead);
-  tabel.appendChild(tbody);
-
-  container.innerHTML = "";
-  container.appendChild(tabel);
+  // Tambahkan baris jumlah
+  const totalRow = document.createElement("tr");
+  totalRow.innerHTML = `
+    <td colspan="2" class="bg-blue-200 text-white font-bold px-2 py-2 text-right">Jumlah</td>
+    <td class="bg-blue-200 text-white font-bold px-2 py-2 text-right">${formatRupiah(total)}</td>
+    <td colspan="3" class="bg-blue-200"></td>
+  `;
+  tbody.appendChild(totalRow);
 }
+
 
 function filterData() {
   const tglAwal = document.getElementById("filterTanggalAwal").value;
@@ -100,6 +88,16 @@ function filterData() {
 
   tampilkanTabel(hasil);
 }
+
+function formatRupiah(angka) {
+  const n = parseInt(angka?.toString().replace(/\D/g, "")) || 0;
+  return n.toLocaleString("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0
+  });
+}
+
 
 // Jalankan saat halaman siap
 window.addEventListener("DOMContentLoaded", async () => {
