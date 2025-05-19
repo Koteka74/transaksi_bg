@@ -91,6 +91,8 @@ jumlahInput.addEventListener("input", function () {
 
 // Toggle sidebar hamburger menu
 document.addEventListener("DOMContentLoaded", function () {
+  loadAutocompleteUraian();
+  
   const toggle = document.getElementById("menu-toggle");
   const sidebar = document.getElementById("sidebar");
 
