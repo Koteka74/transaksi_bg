@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input Biaya Operasional</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+      <div class="p-4 border-b border-blue-700">
+        <h2 class="text-xl font-bold pl-1">Menu</h2>
+      </div>
+      <nav class="p-4 space-y-4">
+        <a href="index.html" class="block hover:text-blue-200 font-medium">🏠 Dashboard</a>
+        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
+        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
+        <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
+        <a href="input_operasional.html" class="block text-blue-200 font-semibold">➕ Input Operasional</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col">
+      <!-- Topbar mobile -->
+      <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
+        <button id="menu-toggle" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <span class="text-lg font-semibold pl-2">Menu</span>
+      </header>
+
+      <!-- Form input -->
+      <main class="p-4 bg-gray-100 flex-1">
+        <form id="formOperasional" class="space-y-4 max-w-xl">
+          <div>
+            <label for="tanggal" class="block font-semibold mb-1">Tanggal</label>
+            <input type="date" id="tanggal" class="w-full border border-gray-300 p-2 rounded">
+          </div>
+          <div>
+            <label for="uraian" class="block font-semibold mb-1">Uraian</label>
+            <input type="text" id="uraian" class="w-full border border-gray-300 p-2 rounded">
+          </div>
+          <div>
+            <label for="nilai" class="block font-semibold mb-1">Nilai</label>
+            <input type="text" id="nilai" class="w-full border border-gray-300 p-2 rounded" placeholder="contoh: 120.000">
+          </div>
+          <div>
+            <label for="keterangan" class="block font-semibold mb-1">Keterangan</label>
+            <input type="text" id="keterangan" class="w-full border border-gray-300 p-2 rounded">
+          </div>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+        </form>
+
+        <div id="notif" class="mt-4 p-3 bg-green-100 text-green-800 rounded hidden">✅ Data berhasil disimpan!</div>
+      </main>
+    </div>
+  </div>
+
+  <script src="input_operasional.js"></script>
+</body>
+</html>
