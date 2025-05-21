@@ -1,7 +1,7 @@
 // input_operasional.js
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbztF1I4r-Ti59X-QfrxwNTElYeNqm16hqprbLuujY1ua7EI5hMia0aeHHyH0IIXYM8/exec"; // Ganti dengan URL Web App Anda
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec"; // Ganti dengan URL Web App Anda
 
-// Toggle sidebar
+// Sidebar toggle
 const toggle = document.getElementById("menu-toggle");
 const sidebar = document.getElementById("sidebar");
 if (toggle && sidebar) {
@@ -15,19 +15,32 @@ if (toggle && sidebar) {
   });
 }
 
-// Simpan data operasional
+// Format input angka
+["debet", "kredit"].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", function () {
+    const raw = this.value.replace(/\D/g, "");
+    this.value = raw ? parseInt(raw).toLocaleString("id-ID") : "";
+  });
+});
+
+// Simpan data
 const form = document.getElementById("formOperasional");
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const tanggal = document.getElementById("tanggal").value;
   const uraian = document.getElementById("uraian").value;
-  const nilaiFormatted = document.getElementById("nilai").value;
-  const nilai = nilaiFormatted.replace(/\./g, "").replace(/,/g, "");
+  const debetFormatted = document.getElementById("debet").value;
+  const kreditFormatted = document.getElementById("kredit").value;
+  const kategori = document.getElementById("kategori").value;
   const keterangan = document.getElementById("keterangan").value;
 
-  if (!tanggal || !uraian || !nilai) {
-    alert("Tanggal, Uraian, dan Nilai wajib diisi.");
+  const debet = debetFormatted.replace(/\./g, "").replace(/,/g, "");
+  const kredit = kreditFormatted.replace(/\./g, "").replace(/,/g, "");
+
+  if (!tanggal || !uraian || (!debet && !kredit)) {
+    alert("Tanggal, Uraian, dan minimal Debet atau Kredit wajib diisi.");
     return;
   }
 
@@ -35,7 +48,9 @@ form.addEventListener("submit", async function (e) {
     sheet: "Ops",
     Tanggal: tanggal,
     Uraian: uraian,
-    Nilai: nilai,
+    Debet: debet,
+    Kredit: kredit,
+    Kategori: kategori,
     Keterangan: keterangan
   };
 
@@ -60,16 +75,5 @@ form.addEventListener("submit", async function (e) {
   } catch (err) {
     console.error("❌ Gagal kirim:", err);
     alert("Gagal menyimpan data operasional.");
-  }
-});
-
-// Format nilai saat diketik
-const nilaiInput = document.getElementById("nilai");
-nilaiInput.addEventListener("input", function () {
-  const raw = this.value.replace(/\D/g, "");
-  if (raw) {
-    this.value = parseInt(raw).toLocaleString("id-ID");
-  } else {
-    this.value = "";
   }
 });

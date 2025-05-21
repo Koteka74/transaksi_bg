@@ -19,13 +19,12 @@
         <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
         <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
         <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
-        <a href="input_operasional.html" class="block text-blue-200 font-semibold">➕ Input Operasional</a>
+        <a href="input_operasional.html" class="block text-blue-200 font-bold">➕ Input Operasional</a>
       </nav>
     </aside>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <div class="flex-1 flex flex-col">
-      <!-- Topbar mobile -->
       <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
         <button id="menu-toggle" class="text-white focus:outline-none">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,33 +34,45 @@
         <span class="text-lg font-semibold pl-2">Menu</span>
       </header>
 
-      <!-- Form input -->
       <main class="p-4 bg-gray-100 flex-1">
-        <form id="formOperasional" class="space-y-4 max-w-xl">
+        <h1 class="text-2xl font-bold mb-4">Input Biaya Operasional</h1>
+        <form id="formOperasional" class="space-y-4">
           <div>
-            <label for="tanggal" class="block font-semibold mb-1">Tanggal</label>
-            <input type="date" id="tanggal" class="w-full border border-gray-300 p-2 rounded">
+            <label class="block text-sm font-semibold">Tanggal</label>
+            <input type="date" id="tanggal" class="border p-2 w-full rounded" required />
           </div>
           <div>
-            <label for="uraian" class="block font-semibold mb-1">Uraian</label>
-            <input type="text" id="uraian" class="w-full border border-gray-300 p-2 rounded">
+            <label class="block text-sm font-semibold">Uraian</label>
+            <input type="text" id="uraian" class="border p-2 w-full rounded" required />
           </div>
           <div>
-            <label for="nilai" class="block font-semibold mb-1">Nilai</label>
-            <input type="text" id="nilai" class="w-full border border-gray-300 p-2 rounded" placeholder="contoh: 120.000">
+            <label class="block text-sm font-semibold">Debet</label>
+            <input type="text" id="debet" class="border p-2 w-full rounded" placeholder="cth: 150.000" />
           </div>
           <div>
-            <label for="keterangan" class="block font-semibold mb-1">Keterangan</label>
-            <input type="text" id="keterangan" class="w-full border border-gray-300 p-2 rounded">
+            <label class="block text-sm font-semibold">Kredit</label>
+            <input type="text" id="kredit" class="border p-2 w-full rounded" placeholder="cth: 500.000" />
           </div>
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+          <div>
+            <label class="block text-sm font-semibold">Jenis Transaksi</label>
+            <select id="kategori" class="border p-2 w-full rounded">
+              <option value="">-- Pilih Jenis --</option>
+              <option value="Biaya Operasional">Biaya Operasional</option>
+              <option value="Biaya Gaji">Biaya Gaji</option>
+              <option value="Prive">Prive</option>
+              <option value="Keuntungan Kotor">Keuntungan Kotor</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold">Keterangan</label>
+            <textarea id="keterangan" class="border p-2 w-full rounded"></textarea>
+          </div>
+          <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded">Simpan</button>
+          <div id="notif" class="text-green-600 font-semibold hidden">✅ Data berhasil disimpan</div>
         </form>
-
-        <div id="notif" class="mt-4 p-3 bg-green-100 text-green-800 rounded hidden">✅ Data berhasil disimpan!</div>
       </main>
     </div>
   </div>
-
   <script src="input_operasional.js"></script>
 </body>
 </html>
