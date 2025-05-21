@@ -1,5 +1,5 @@
 // input_operasional.js
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec"; // Ganti dengan URL Web App Anda
+const SHEET_API_URL = "/api/kirim-operasional";
 
 // Sidebar toggle
 const toggle = document.getElementById("menu-toggle");
