@@ -1,6 +1,6 @@
 // data.js – Tambahan: Filter Tanggal, Periode 17–18, dan Pencarian Uraian
 
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxo7859kAtaphc9ddgacR4aCZRk-dOeYWi-NYJx6nksBtnRLq_g5_5J0_7R3jthQk8/exec';
 let semuaData = [];
 
 async function ambilData() {
