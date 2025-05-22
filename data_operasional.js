@@ -1,5 +1,5 @@
 // data_operasional.js – Responsif dan urut rapi di mobile
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec?sheet=Ops';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxo7859kAtaphc9ddgacR4aCZRk-dOeYWi-NYJx6nksBtnRLq_g5_5J0_7R3jthQk8/exec?sheet=Ops';
 let semuaData = [];
 
 async function ambilData() {
