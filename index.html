@@ -21,7 +21,7 @@
         <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
         <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
         <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
-        <a href="input_operasional.html" class="block hover:text-blue-200 font-medium">➕ Input Operasional</a>
+        <a href="input_operasional.html" class="block text-blue-200 font-bold">➕ Input Operasional</a>
       </nav>
     </aside>
 
@@ -55,15 +55,37 @@
           </button>
         </div>
       </div>
+      
+      <div id="rekapOperasional" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="font-medium font-semibold mb-2">Total Pengeluaran Operasional</h2>
+          <p id="totalOperasional" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Total Biaya Gaji</h2>
+          <p id="totalGaji" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Total Prive</h2>
+          <p id="totalPrive" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Sisa Kas Operasional</h2>
+          <p id="sisaKas" class="text-2xl font-bold text-green-600">Rp 0</p>
+        </div>
+      </div>
 
       <!-- Info Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white p-4 rounded shadow">
-          <h2 id="labelJudulPengeluaran" class="font-medium mb-2">Total Pengeluaran Bulan Ini</h2>
+          <h2 id="labelJudulPengeluaran" class="font-medium mb-2">Total Pengeluaran HPP</h2>
           <p id="totalPengeluaran" class="text-2xl font-bold text-red-600">Rp 0</p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="font-medium mb-2">Saldo Kas Sekarang</h2>
+          <h2 class="font-medium mb-2">Saldo Kas HPP</h2>
           <p id="saldoKas" class="text-2xl font-bold text-green-600">Rp 0</p>
         </div>
       </div>
