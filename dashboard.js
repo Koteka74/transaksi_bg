@@ -1,15 +1,24 @@
 const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxo7859kAtaphc9ddgacR4aCZRk-dOeYWi-NYJx6nksBtnRLq_g5_5J0_7R3jthQk8/exec';
 
 let semuaData = [];
+let opsData = [];
 let urutAbjad = false;
 
 async function fetchData() {
   try {
-    const res = await fetch(SHEET_API_URL);
-    const json = await res.json();
-    console.log("✅ Data berhasil diambil:", json.data);
-    semuaData = json.data || [];
-    filterDanTampilkan(); // otomatis jalankan filter awal
+    const [res1, res2] = await Promise.all([
+      fetch(SHEET_API_URL + '?sheet=BahanBaku(HPP)'),
+      fetch(SHEET_API_URL + '?sheet=Ops')
+    ]);
+    const json1 = await res1.json();
+    const json2 = await res2.json();
+
+    console.log("✅ Data bahan berhasil:", json1.data);
+    console.log("✅ Data operasional berhasil:", json2.data);
+    semuaData = json1.data || [];
+    opsData = json2.data || [];
+
+    filterDanTampilkan();
     tampilkanSaldoKas(semuaData);
   } catch (err) {
     console.error("❌ Gagal fetch:", err);
@@ -27,17 +36,17 @@ function tampilkanPeriode(start, end) {
 
 function filterDanTampilkan() {
   const filter = document.getElementById("pilihPeriode").value;
-  let data = [];
-  let start, end;
+  let data = [], start, end;
 
   if (filter === "semua") {
     data = semuaData;
     if (data.length > 0) {
-      const awal = new Date(data[0].Tanggal);
-      const akhir = new Date(data[data.length - 1].Tanggal);
-      tampilkanPeriode(awal, akhir);
+      start = new Date(data[0].Tanggal);
+      end = new Date(data[data.length - 1].Tanggal);
+      tampilkanPeriode(start, end);
     } else {
-      tampilkanPeriode(new Date(), new Date());
+      start = end = new Date();
+      tampilkanPeriode(start, end);
     }
   } else {
     start = new Date(filter + "-18T00:00:00");
@@ -53,6 +62,7 @@ function filterDanTampilkan() {
 
   tampilkanTotalPengeluaran(data);
   tampilkanRekapTotalPerItem(data);
+  tampilkanOperasional(opsData, start, end);
 }
 
 function tampilkanTotalPengeluaran(data) {
@@ -95,6 +105,36 @@ function tampilkanRekapTotalPerItem(data) {
   });
 }
 
+function tampilkanOperasional(data, awal, akhir) {
+  const dataPeriode = data.filter(item => {
+    const tgl = new Date(item.Tanggal);
+    return tgl >= awal && tgl <= akhir;
+  });
+
+  let totalOperasional = 0;
+  let totalGaji = 0;
+  let totalPrive = 0;
+
+  dataPeriode.forEach(row => {
+    const kategori = (row.Kategori || "").toLowerCase().replace(/[^a-z]/g, "");
+    const nilai = parseFloat(row.Debet || 0);
+    if (kategori.includes("biayaoperasional")) totalOperasional += nilai;
+    else if (kategori.includes("biayagaji")) totalGaji += nilai;
+    else if (kategori.includes("prive")) totalPrive += nilai;
+  });
+
+  const saldoAkhir = (() => {
+    const angkaValid = dataPeriode.map(d => parseFloat(d.Saldo || 0)).filter(s => !isNaN(s));
+    return angkaValid.length ? angkaValid[angkaValid.length - 1] : 0;
+  })();
+
+  document.getElementById("totalOperasional").textContent = `Rp ${totalOperasional.toLocaleString("id-ID")}`;
+  document.getElementById("totalGaji").textContent = `Rp ${totalGaji.toLocaleString("id-ID")}`;
+  document.getElementById("totalPrive").textContent = `Rp ${totalPrive.toLocaleString("id-ID")}`;
+  document.getElementById("sisaKas").textContent = `Rp ${saldoAkhir.toLocaleString("id-ID")}`;
+}
+
+
 function toggleUrutan() {
   urutAbjad = !urutAbjad;
   filterDanTampilkan();
@@ -113,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.toggle("-translate-x-full");
     });
 
-    // Tutup sidebar otomatis setelah klik link menu (mobile)
     document.querySelectorAll("#sidebar a").forEach(link => {
       link.addEventListener("click", () => {
         sidebar.classList.add("-translate-x-full");
