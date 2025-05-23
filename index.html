@@ -22,8 +22,8 @@
       </div>
       <nav class="p-4 space-y-4">
         <a href="index.html" class="block text-blue-200 font-bold">🏠 Dashboard</a>
-        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
-        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
+        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian Bahan</a>
+        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian Bahan</a>
         <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
         <a href="input_operasional.html" class="block hover:text-blue-200 font-medium">➕ Input Operasional</a>
       </nav>
@@ -59,7 +59,8 @@
           </button>
         </div>
       </div>
-      
+
+      <!-- Info Cards -->
       <div id="rekapOperasional" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div class="bg-white p-4 rounded shadow">
           <h2 class="font-medium font-semibold mb-2">Total Pengeluaran Operasional</h2>
@@ -73,6 +74,10 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div class="bg-white p-4 rounded shadow">
+          <h2 class="font-medium font-semibold mb-2">Total Cicilan Kredit</h2>
+          <p id="totalCicilanKredit" class="text-2xl font-bold text-red-600">Rp 0</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
           <h2 class="text-lg font-semibold mb-2">Total Prive</h2>
           <p id="totalPrive" class="text-2xl font-bold text-red-600">Rp 0</p>
         </div>
@@ -82,7 +87,6 @@
         </div>
       </div>
 
-      <!-- Info Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white p-4 rounded shadow">
           <h2 id="labelJudulPengeluaran" class="font-medium mb-2">Total Pengeluaran HPP</h2>
