@@ -31,7 +31,7 @@ function tampilkanPeriode(start, end) {
   if (el) el.textContent = label;
 
   const judul = document.getElementById("labelJudulPengeluaran");
-  if (judul) judul.textContent = `Total Pengeluaran Periode`;
+  if (judul) judul.textContent = `Total Pengeluaran HPP`;
 }
 
 function filterDanTampilkan() {
