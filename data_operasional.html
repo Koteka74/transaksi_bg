@@ -16,8 +16,8 @@
       </div>
       <nav class="p-4 space-y-4">
         <a href="index.html" class="block hover:text-blue-200 font-medium">🏠 Dashboard</a>
-        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian</a>
-        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian</a>
+        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian Bahan</a>
+        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian Bahan</a>
         <a href="data_operasional.html" class="block text-blue-200 font-bold">🧾 Data Operasional</a>
         <a href="input_operasional.html" class="block hover:text-blue-200 font-medium">➕ Input Operasional</a>
       </nav>
@@ -34,56 +34,61 @@
         <span class="text-lg font-semibold pl-2">Menu</span>
       </header>
 
-      <main class="p-4 bg-gray-100 flex-1">
-        <h1 class="text-2xl font-bold mb-4">Data Biaya Operasional</h1>
+      <!-- Konten utama -->
+      <main class="p-4 flex-1 space-y-4">
+        <h1 class="text-2xl font-bold ml-10 md:ml-0">Data Biaya Operasional</h1>
 
-        <!-- Filter Bar -->
-        <div class="flex flex-wrap gap-4 items-end mb-4">
-          <div>
-            <label class="block text-sm font-semibold">Tanggal Awal</label>
-            <input type="date" id="filterTanggalAwal" class="border p-1 rounded" />
+        <div class="bg-white p-4 rounded shadow">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+            <p class="text-sm text-gray-500">Data operasional per periode:</p>
+            <button id="resetFilter" class="mt-2 md:mt-0 bg-gray-200 hover:bg-gray-300 text-sm px-3 py-1 rounded">Reset Filter</button>
           </div>
-          <div>
-            <label class="block text-sm font-semibold">Tanggal Akhir</label>
-            <input type="date" id="filterTanggalAkhir" class="border p-1 rounded" />
-          </div>
-          <div>
-            <label class="block text-sm font-semibold">Periode (17–17)</label>
-            <select id="filterPeriode" class="border p-1 rounded">
-              <option value="semua">Semua</option>
-              <option value="2024-12">Desember 2024 - Januari 2025</option>
-              <option value="2025-01">Januari - Februari 2025</option>
-              <option value="2025-02">Februari - Maret 2025</option>
-              <option value="2025-03">Maret - April 2025</option>
-              <option value="2025-04">April - Mei 2025</option>
-              <option value="2025-05">Mei - Juni 2025</option>
-              <option value="2025-06">Juni - Juli 2025</option>
-              <!-- dst -->
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-semibold">Uraian</label>
-            <input type="text" id="filterUraian" class="border p-1 rounded" placeholder="Cari uraian..." />
-          </div>
-          <button id="resetFilter" class="bg-gray-300 px-3 py-2 rounded text-sm font-semibold">Reset</button>
-        </div>
 
-        <!-- Data Table -->
-        <div class="overflow-x-auto">
-          <table id="tabelData" class="w-full border text-sm">
-            <thead>
-              <tr class="bg-gray-200 text-left">
-                <th class="border px-2 py-1">Tanggal</th>
-                <th class="border px-2 py-1">Uraian</th>
-                <th class="border px-2 py-1 text-right">Debet</th>
-                <th class="border px-2 py-1 text-right">Kredit</th>
-                <th class="border px-2 py-1 text-right">Saldo</th>
-                <th class="border px-2 py-1">Kategori</th>
-                <th class="border px-2 py-1">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <!-- Filter Bar -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+            <div class="sm:col-span-2 flex gap-2">
+              <div class="w-1/2">
+                <label class="block text-sm text-gray-600">Tanggal Awal</label>
+                <input type="date" id="filterTanggalAwal" class="w-full border px-2 py-1 rounded text-sm" />
+              </div>
+              <div class="w-1/2">
+                <label class="block text-sm text-gray-600">Tanggal Akhir</label>
+                <input type="date" id="filterTanggalAkhir" class="w-full border px-2 py-1 rounded text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600">Periode (17–18)</label>
+              <select id="filterPeriode" class="w-full border px-2 py-1 rounded text-sm">
+                <option value="semua">Semua</option>
+                <option value="2025-04">April - Mei 2025</option>
+                <option value="2025-05">Mei - Juni 2025</option>
+                <option value="2025-06">Juni - Juli 2025</option>
+                <!-- dst -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600">Uraian</label>
+              <input type="text" id="filterUraian" class="w-full border px-2 py-1 rounded text-sm" placeholder="Cari uraian..." />
+            </div>      
+          </div>
+
+          <!-- Data Table -->
+          <div class="overflow-x-auto">
+            <table id="tabelData" class="w-full border text-sm mt-4">
+              <thead>
+                <tr class="bg-gray-200 text-left">
+                  <th class="border px-2 py-1">Tanggal</th>
+                  <th class="border px-2 py-1">Uraian</th>
+                  <th class="border px-2 py-1 text-right">Debet</th>
+                  <th class="border px-2 py-1 text-right">Kredit</th>
+                  <th class="border px-2 py-1 text-right">Saldo</th>
+                  <th class="border px-2 py-1">Kategori</th>
+                  <th class="border px-2 py-1">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>
