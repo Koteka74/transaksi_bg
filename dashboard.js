@@ -114,6 +114,7 @@ function tampilkanOperasional(data, awal, akhir) {
   let totalOperasional = 0;
   let totalGaji = 0;
   let totalPrive = 0;
+  let totalCicilanKredit = 0;
 
   dataPeriode.forEach(row => {
     const kategori = (row.Kategori || "").toLowerCase().replace(/[^a-z]/g, "");
@@ -121,6 +122,7 @@ function tampilkanOperasional(data, awal, akhir) {
     if (kategori.includes("biayaoperasional")) totalOperasional += nilai;
     else if (kategori.includes("biayagaji")) totalGaji += nilai;
     else if (kategori.includes("prive")) totalPrive += nilai;
+    else if (kategori.includes("cicilankredit")) totalCicilanKredit += nilai;
   });
 
   const saldoAkhir = (() => {
@@ -131,6 +133,7 @@ function tampilkanOperasional(data, awal, akhir) {
   document.getElementById("totalOperasional").textContent = `Rp ${totalOperasional.toLocaleString("id-ID")}`;
   document.getElementById("totalGaji").textContent = `Rp ${totalGaji.toLocaleString("id-ID")}`;
   document.getElementById("totalPrive").textContent = `Rp ${totalPrive.toLocaleString("id-ID")}`;
+  document.getElementById("totalCicilanKredit").textContent = `Rp ${totalCicilanKredit.toLocaleString("id-ID")}`;
   document.getElementById("sisaKas").textContent = `Rp ${saldoAkhir.toLocaleString("id-ID")}`;
 }
 
