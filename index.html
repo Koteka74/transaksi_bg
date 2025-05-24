@@ -11,6 +11,9 @@
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#1d4ed8" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
@@ -122,6 +125,35 @@
         .catch(function (error) {
           console.error("❌ Gagal registrasi Service Worker:", error);
         });
+    }
+  </script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmvG_P7ekN3Vn2lrM6xp7fE2F0NC_y0MA",
+      authDomain: "transaksi-bakso-garasi.firebaseapp.com",
+      projectId: "transaksi-bakso-garasi",
+      messagingSenderId: "273103643750",
+      appId: "1:273103643750:web:bcba66f7fdb425d8ebf9a7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    messaging.requestPermission()
+      .then(() => messaging.getToken())
+      .then((token) => {
+        console.log("✅ FCM Token:", token);
+        // Kirim token ke server / Google Sheets kalau perlu
+      })
+      .catch((err) => {
+        console.warn("❌ Izin notifikasi ditolak:", err);
+      });
+
+    // Registrasi SW
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(reg => console.log('✅ Service Worker terdaftar'))
+        .catch(err => console.error('❌ SW gagal:', err));
     }
   </script>
 </body>
