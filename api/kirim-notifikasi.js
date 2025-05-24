@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://fcm.googleapis.com/fcm/send", {
       method: "POST",
       headers: {
-        Authorization: "key=AIzaSyCmvG_P7ekN3Vn2lrM6xp7fE2F0NC_y0MA", // Ganti ini
+        Authorization: "key=AIzaSyCmvG_P7ekN3Vn2lrM6xp7fE2F0NC_y0MA", // Ganti dengan API Key kamu
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -21,10 +21,18 @@ export default async function handler(req, res) {
       })
     });
 
-    const result = await response.json();
-    res.status(200).json({ result: "success", response: result });
+    const contentType = response.headers.get("content-type");
+
+    // Periksa apakah JSON
+    if (contentType && contentType.includes("application/json")) {
+      const result = await response.json();
+      return res.status(200).json({ result: "success", fcm: result });
+    } else {
+      const text = await response.text(); // kemungkinan HTML error
+      return res.status(500).json({ result: "error", message: "Invalid response from FCM", body: text });
+    }
   } catch (error) {
     console.error("❌ Gagal kirim notifikasi:", error);
-    res.status(500).json({ result: "error", message: error.message });
+    return res.status(500).json({ result: "error", message: error.message });
   }
 }
