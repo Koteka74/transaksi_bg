@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://fcm.googleapis.com/fcm/send", {
       method: "POST",
       headers: {
-        Authorization: "key=AIzaSyCmvG_P7ekN3Vn2lrM6xp7fE2F0NC_y0MA",
+        Authorization: "key=AIzaSyCM55kAL7gMU7ZBt9Zce_jo29PkPRXHn2I",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
