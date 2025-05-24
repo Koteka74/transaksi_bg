@@ -4,7 +4,8 @@ export default async function handler(req, res) {
   }
 
   const { token, title, body } = req.body;
-
+  console.log("📥 Payload diterima:", { token, title, body });
+  
   try {
     const response = await fetch("https://fcm.googleapis.com/fcm/send", {
       method: "POST",
