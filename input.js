@@ -65,15 +65,16 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       notif.classList.remove("hidden");
       setTimeout(() => notif.classList.add("hidden"), 3000);
 
-      // Setelah berhasil simpan data
+      // Kirim notifikasi setelah data berhasil disimpan
       await fetch("/api/kirim-notifikasi", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          token: "FCM_TOKEN_PENERIMA", // Ganti ini jika disimpan dinamis
-          title: "Transaksi Tercatat",
-          body: "Pembelian baru telah disimpan ke sistem."
-        })
+          title: "Pembelian Baru",
+          body: `Data pembelian "${uraian}" telah disimpan.`,
+        }),
       });
     } else {
       alert("Gagal simpan: " + JSON.stringify(hasil));
