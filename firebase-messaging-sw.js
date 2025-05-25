@@ -12,10 +12,22 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
-  const { title, body } = payload.notification;
-  self.registration.showNotification(title, {
-    body,
-    icon: "/icon.png", // opsional
-  });
+// Tampilkan notifikasi saat pesan diterima di background
+messaging.onBackgroundMessage(function (payload) {
+  console.log("📩 [firebase-messaging-sw.js] Pesan diterima:", payload);
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: "/icon-192.png", // opsional
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Saat notifikasi diklik
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow("/") // arahkan ke halaman utama
+  );
 });
