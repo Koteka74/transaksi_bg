@@ -12,14 +12,10 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-  console.log("📦 [Service Worker] Pesan diterima:", payload);
-
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/icon-192x192.png"
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
+messaging.onBackgroundMessage(payload => {
+  const { title, body } = payload.notification;
+  self.registration.showNotification(title, {
+    body,
+    icon: "/icon.png", // opsional
+  });
 });
