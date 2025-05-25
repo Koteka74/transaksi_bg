@@ -63,9 +63,10 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       document.getElementById("formTransaksi").reset();
       const notif = document.getElementById("notif");
       notif.classList.remove("hidden");
-      setTimeout(() => notif.classList.add("hidden"), 3000);
 
-      await kirimNotifikasi("Transaksi Baru", "Pembelian baru berhasil disimpan.");
+      // Kirim notifikasi otomatis
+      await kirimNotifikasi("Transaksi Baru", "Data pembelian berhasil disimpan.");
+      setTimeout(() => notif.classList.add("hidden"), 3000);
 
     } else {
       alert("Gagal simpan: " + JSON.stringify(hasil));
@@ -119,15 +120,12 @@ async function kirimNotifikasi(judul, pesan) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        title: judul,
-        body: pesan
-      })
+      body: JSON.stringify({ judul, pesan })
     });
-
     const hasil = await res.json();
     console.log("📬 Notifikasi dikirim:", hasil);
   } catch (err) {
     console.error("❌ Gagal kirim notifikasi:", err);
   }
 }
+
