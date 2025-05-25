@@ -33,7 +33,7 @@ function ambilToken() {
 }
 
 function simpanToken(token) {
-  fetch("https://script.google.com/macros/s/AKfycbzEmuQwEYw5NBeq3va03WnegvIy0Ef2ZQbONaZI_M8Uxuqkakw_fbsD2T0QkLltP_Y/exec", {
+  fetch("/api/simpan-token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token })
