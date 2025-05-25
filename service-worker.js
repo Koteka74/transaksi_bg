@@ -1,5 +1,5 @@
 const CACHE_NAME = "transaksi-cache-v1";
-const urlsToCache = ["/", "/index.html", "/dashboard.js", "/tailwind.min.css"];
+const urlsToCache = ["/", "/index.html", "/dashboard.js"]; // Pastikan file ini memang ada
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
