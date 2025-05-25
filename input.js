@@ -120,7 +120,10 @@ async function kirimNotifikasi(judul, pesan) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ judul, pesan })
+      body: JSON.stringify({
+        judul: judul,
+        pesan: pesan 
+      })
     });
     const hasil = await res.json();
     console.log("📬 Notifikasi dikirim:", hasil);
