@@ -1,45 +1,58 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Metode tidak diizinkan" });
+    return res.status(405).json({ result: "error", message: "Method not allowed" });
   }
 
-  const { token, title, body } = req.body;
-  console.log("📥 Kirim notifikasi ke token:", token);
-  console.log("📨 Judul:", title);
-  console.log("📨 Pesan:", body);
+  const { title, body } = req.body;
+
+  if (!title || !body) {
+    return res.status(400).json({ result: "error", message: "Missing title or body" });
+  }
+
+  // 1. Fetch tokens dari Google Sheet
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbzEmuQwEYw5NBeq3va03WnegvIy0Ef2ZQbONaZI_M8Uxuqkakw_fbsD2T0QkLltP_Y/exec"; // ganti dengan URL Apps Script Anda
+  let tokenList = [];
 
   try {
-    const response = await fetch("https://fcm.googleapis.com/fcm/send", {
-      method: "POST",
-      headers: {
-        Authorization: "key=AIzaSyCM55kAL7gMU7ZBt9Zce_jo29PkPRXHn2I",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        to: token,
-        notification: {
-          title: title || "Judul Default",
-          body: body || "Isi pesan default"
-        }
-      })
-    });
-
-    console.log("📡 Status code:", response.status);
-    console.log("📡 Headers:", [...response.headers]);
-
-    const contentType = response.headers.get("content-type") || "";
-
-    if (contentType.includes("application/json")) {
-      const result = await response.json();
-      console.log("✅ Respon JSON:", result);
-      return res.status(200).json({ result: "success", response: result });
-    } else {
-      const rawText = await response.text();
-      console.error("⚠️ FCM bukan JSON:", rawText);
-      return res.status(500).json({ result: "error", message: "FCM bukan JSON", raw: rawText });
+    const response = await fetch(sheetUrl);
+    const data = await response.json();
+    tokenList = data.tokens || [];
+    if (!Array.isArray(tokenList) || tokenList.length === 0) {
+      return res.status(400).json({ result: "error", message: "No FCM tokens found." });
     }
   } catch (error) {
-    console.error("❌ ERROR GAGAL:", error);
-    return res.status(500).json({ result: "error", message: error.message });
+    return res.status(500).json({ result: "error", message: "Failed to fetch tokens" });
   }
+
+  const fcmUrl = "https://fcm.googleapis.com/fcm/send";
+  const serverKey = process.env.FCM_SERVER_KEY;
+
+  // 2. Kirim notifikasi ke setiap token
+  const results = await Promise.all(tokenList.map(async token => {
+    const payload = {
+      to: token,
+      notification: {
+        title,
+        body,
+      },
+    };
+
+    try {
+      const response = await fetch(fcmUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `key=${serverKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      return { token, status: "success", result };
+    } catch (err) {
+      return { token, status: "failed", error: err.message };
+    }
+  }));
+
+  return res.status(200).json({ result: "success", reports: results });
 }
