@@ -21,7 +21,7 @@ function ambilToken() {
     .then((currentToken) => {
       if (currentToken) {
         console.log("✅ Token FCM:", currentToken);
-
+        simpanToken(currentToken); // kirim ke Google Sheet
         // Simpan token ke localStorage (atau kirim ke server jika perlu)
         localStorage.setItem("fcm_token", currentToken);
 
@@ -39,5 +39,20 @@ function ambilToken() {
     })
     .catch((err) => {
       console.error("❌ Gagal ambil token:", err);
+    });
+}
+
+function simpanToken(token) {
+  fetch("https://script.google.com/macros/s/AKfycbzEmuQwEYw5NBeq3va03WnegvIy0Ef2ZQbONaZI_M8Uxuqkakw_fbsD2T0QkLltP_Y/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token })
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log("📥 Respon simpan token:", res);
+    })
+    .catch((err) => {
+      console.error("❌ Gagal simpan token:", err);
     });
 }
