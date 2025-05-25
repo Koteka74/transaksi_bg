@@ -65,17 +65,8 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       notif.classList.remove("hidden");
       setTimeout(() => notif.classList.add("hidden"), 3000);
 
-      // Kirim notifikasi setelah data berhasil disimpan
-      await fetch("/api/kirim-notifikasi", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: "Pembelian Baru",
-          body: `Data pembelian "${uraian}" telah disimpan.`,
-        }),
-      });
+      await kirimNotifikasi("Transaksi Baru", "Pembelian baru berhasil disimpan.");
+
     } else {
       alert("Gagal simpan: " + JSON.stringify(hasil));
     }
@@ -120,3 +111,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+async function kirimNotifikasi(judul, pesan) {
+  try {
+    const res = await fetch("/api/kirim-notifikasi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: judul,
+        body: pesan
+      })
+    });
+
+    const hasil = await res.json();
+    console.log("📬 Notifikasi dikirim:", hasil);
+  } catch (err) {
+    console.error("❌ Gagal kirim notifikasi:", err);
+  }
+}
