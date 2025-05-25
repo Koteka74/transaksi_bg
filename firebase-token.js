@@ -1,16 +1,16 @@
 // firebase-token.js
 
-// Minta izin notifikasi dari pengguna
-Notification.requestPermission().then((permission) => {
-  if (permission === "granted") {
-    console.log("🔔 Izin notifikasi diberikan.");
-    ambilToken();
-  } else {
-    console.warn("🚫 Izin notifikasi ditolak.");
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      console.log("🔔 Izin notifikasi diberikan.");
+      ambilToken();
+    } else {
+      console.warn("🚫 Izin notifikasi ditolak.");
+    }
+  });
 });
 
-// Fungsi untuk ambil token FCM
 function ambilToken() {
   const messaging = firebase.messaging();
 
@@ -21,18 +21,8 @@ function ambilToken() {
     .then((currentToken) => {
       if (currentToken) {
         console.log("✅ Token FCM:", currentToken);
-        simpanToken(currentToken); // kirim ke Google Sheet
-        // Simpan token ke localStorage (atau kirim ke server jika perlu)
+        simpanToken(currentToken);
         localStorage.setItem("fcm_token", currentToken);
-
-        // Atau kirim ke server:
-        /*
-        fetch("/api/simpan-token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: currentToken })
-        });
-        */
       } else {
         console.warn("⚠️ Token kosong.");
       }
@@ -56,5 +46,5 @@ function simpanToken(token) {
       console.error("❌ Gagal simpan token:", err);
     });
 }
-// Ekspor fungsi agar bisa dipanggil dari console
+
 window.simpanToken = simpanToken;
