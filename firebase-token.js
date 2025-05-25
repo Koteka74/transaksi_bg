@@ -56,3 +56,5 @@ function simpanToken(token) {
       console.error("❌ Gagal simpan token:", err);
     });
 }
+// Ekspor fungsi agar bisa dipanggil dari console
+window.simpanToken = simpanToken;
