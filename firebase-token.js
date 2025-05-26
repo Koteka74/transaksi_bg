@@ -31,7 +31,7 @@ Notification.requestPermission().then(permission => {
 async function ambilToken() {
   try {
     const token = await getToken(messaging, {
-      vapidKey: "YOUR_PUBLIC_VAPID_KEY" // jika tidak pakai, bisa hapus opsi ini
+      vapidKey: "BKEmOESDGJWvHc5qSlctfHN_b5Z56eIOkUJCMXw70h0BV5Og0xWs6OkSv_rfnSIeLCMDntWjKI6HrMs6-pSD4gw" // jika tidak pakai, bisa hapus opsi ini
     });
     if (token) {
       console.log("✅ Token FCM:", token);
