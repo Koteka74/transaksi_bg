@@ -115,13 +115,16 @@
     lucide.createIcons();
   </script>
   <script>
-    // Registrasi SW
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then(reg => console.log('✅ Service Worker terdaftar'))
-        .catch(err => console.error('❌ SW gagal:', err));
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/firebase-messaging-sw.js", { scope: "/" })
+        .then(function (registration) {
+          console.log("✅ Service Worker untuk Firebase terdaftar:", registration);
+        })
+        .catch(function (err) {
+          console.error("❌ Gagal registrasi SW:", err);
+        });
     }
-  </script>
+  </script>>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
