@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   // 1. Fetch tokens dari Google Sheet
-  const sheetUrl = "https://script.google.com/macros/s/AKfycbxPDtLvX7OAMwObKluHEZQJxGnKy5YDfV8w4Ot9JVj6c7JiN49fPaAy6wXLpScNRW4/exec"; // ganti dengan URL Apps Script Anda
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbyu9vXrNsUDYAhaopZstgzsS_7COurqIWxttGKYW6fO7dgFB0xsk482NhqyWz59Zg/exec"; // ganti dengan URL Apps Script Anda
   let tokenList = [];
 
   try {
