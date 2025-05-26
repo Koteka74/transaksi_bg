@@ -67,6 +67,6 @@ onMessage(messaging, (payload) => {
   const { title, body } = payload.notification;
   new Notification(title, {
     body: body,
-    icon: "/icon-192.png"
+    icon: "icons/icon-192.png"
   });
 });
