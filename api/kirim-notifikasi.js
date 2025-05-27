@@ -37,6 +37,11 @@ export default async function handler(req, res) {
       }
     };
 
+    // ✅ Tambahkan log di sini
+    console.log("📡 Kirim ke token:", token);
+    console.log("🔑 Server key:", serverKey.slice(0, 10), "...");
+    console.log("📦 Payload:", payload);
+
     try {
       const response = await fetch(fcmUrl, {
         method: "POST",
