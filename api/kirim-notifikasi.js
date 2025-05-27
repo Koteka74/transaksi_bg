@@ -9,8 +9,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ result: "error", message: "Missing title or body" });
   }
 
-  // 1. Fetch tokens dari Google Sheet
-  const sheetUrl = "https://script.google.com/macros/s/AKfycbyu9vXrNsUDYAhaopZstgzsS_7COurqIWxttGKYW6fO7dgFB0xsk482NhqyWz59Zg/exec"; // ganti dengan URL Apps Script Anda
+  // Ambil token dari Google Sheet
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbyu9vXrNsUDYAhaopZstgzsS_7COurqIWxttGKYW6fO7dgFB0xsk482NhqyWz59Zg/exec";
+
   let tokenList = [];
 
   try {
@@ -27,14 +28,13 @@ export default async function handler(req, res) {
   const fcmUrl = "https://fcm.googleapis.com/fcm/send";
   const serverKey = process.env.FCM_SERVER_KEY;
 
-  // 2. Kirim notifikasi ke setiap token
-  const results = await Promise.all(tokenList.map(async token => {
+  const results = await Promise.all(tokenList.map(async (token) => {
     const payload = {
       to: token,
       notification: {
         title,
-        body,
-      },
+        body
+      }
     };
 
     try {
@@ -42,9 +42,9 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Authorization": `key=${serverKey}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       const result = await response.json();
