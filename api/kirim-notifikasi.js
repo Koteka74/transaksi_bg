@@ -13,6 +13,10 @@ const serviceAccount = {
   client_x509_cert_url: process.env.CLIENT_CERT_URL,
 };
 
+//Debug
+console.log("📥 Request body:", req.body);
+console.log("🔐 Env check:", process.env.PROJECT_ID, process.env.CLIENT_EMAIL);
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -58,5 +62,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ result: "success", reports: responseFCM.responses });
   } catch (err) {
     return res.status(500).json({ result: "error", message: err.message });
+    console.error("🔥 Error detail:", err);
+
   }
 }
