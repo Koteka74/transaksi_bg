@@ -1,5 +1,23 @@
-import { google } from 'googleapis';
-import fetch from 'node-fetch';
+import admin from "firebase-admin";
+
+const serviceAccount = {
+  type: "service_account",
+  project_id: process.env.PROJECT_ID,
+  private_key_id: process.env.PRIVATE_KEY_ID,
+  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
+  client_email: process.env.CLIENT_EMAIL,
+  client_id: process.env.CLIENT_ID,
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url: process.env.CLIENT_CERT_URL,
+};
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -7,71 +25,38 @@ export default async function handler(req, res) {
   }
 
   const { title, body } = req.body;
-
   if (!title || !body) {
     return res.status(400).json({ result: "error", message: "Missing title or body" });
   }
 
-  // Load credentials dari environment variable
-  const serviceAccount = JSON.parse(process.env.FCM_SERVICE_ACCOUNT);
-  const SCOPES = ["https://www.googleapis.com/auth/firebase.messaging"];
-
-  // 1. Autentikasi OAuth2
-  const auth = new google.auth.GoogleAuth({
-    credentials: serviceAccount,
-    scopes: SCOPES
-  });
-
-  const accessToken = await auth.getAccessToken();
-
-  // 2. Ambil token dari Google Sheet
-  const sheetURL = "https://script.google.com/macros/s/AKfycbyu9vXrNsUDYAhaopZstgzsS_7COurqIWxttGKYW6fO7dgFB0xsk482NhqyWz59Zg/exec";
-  let tokenList = [];
-
   try {
-    const response = await fetch(sheetURL);
-    const json = await response.json();
-    tokenList = json.tokens || [];
-  } catch (err) {
-    return res.status(500).json({ result: "error", message: "Gagal ambil token dari sheet" });
-  }
+    // Ambil token dari Google Sheet kamu (gunakan URL Google Apps Script)
+    const sheetUrl = "https://script.google.com/macros/s/AKfycbxPDtLvX7OAMwObKluHEZQJxGnKy5YDfV8w4Ot9JVj6c7JiN49fPaAy6wXLpScNRW4/exec";
+    const response = await fetch(sheetUrl);
+    const data = await response.json();
+    const tokens = data.tokens || [];
 
-  if (tokenList.length === 0) {
-    return res.status(400).json({ result: "error", message: "No FCM tokens found." });
-  }
+    if (!Array.isArray(tokens) || tokens.length === 0) {
+      return res.status(400).json({ result: "error", message: "No FCM tokens found." });
+    }
 
-  const responses = [];
-
-  // 3. Kirim ke setiap token
-  for (const token of tokenList) {
-    const message = {
-      message: {
-        token: token,
-        notification: {
-          title,
-          body
-        }
-      }
+    // Kirim notifikasi ke semua token
+    const payload = {
+      notification: {
+        title,
+        body,
+      },
     };
 
-    const fcmURL = `https://fcm.googleapis.com/v1/projects/${serviceAccount.project_id}/messages:send`;
+    const responseFCM = await admin.messaging().sendEach(
+      tokens.map(token => ({
+        token,
+        ...payload,
+      }))
+    );
 
-    try {
-      const response = await fetch(fcmURL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken.token || accessToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(message)
-      });
-
-      const result = await response.json();
-      responses.push({ token, result });
-    } catch (err) {
-      responses.push({ token, error: err.message });
-    }
+    return res.status(200).json({ result: "success", reports: responseFCM.responses });
+  } catch (err) {
+    return res.status(500).json({ result: "error", message: err.message });
   }
-
-  return res.status(200).json({ result: "success", reports: responses });
 }
