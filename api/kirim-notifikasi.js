@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+import fetch from "node-fetch"; // Tambahan penting!
 
 if (!admin.apps.length) {
   const projectId = process.env.PROJECT_ID;
