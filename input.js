@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-async function kirimNotifikasi(title, body) {
+async function kirimNotifikasi(judul, pesan) {
   try {
     const res = await fetch("/api/kirim-notifikasi", {
       method: "POST",
@@ -121,8 +121,8 @@ async function kirimNotifikasi(title, body) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        title: title,
-        body: body 
+        title: judul,
+        body: pesan 
       })
     });
     const hasil = await res.json();
