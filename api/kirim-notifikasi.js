@@ -45,8 +45,8 @@ export default async function handler(req, res) {
       const message = {
         token,
         notification: {
-          title: judul,
-          body: pesan,
+          title: title,
+          body: body,
         },
         webpush: {
           notification: {
