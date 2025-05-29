@@ -6,6 +6,10 @@ if (!admin.apps.length) {
   const clientEmail = process.env.CLIENT_EMAIL;
   const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 
+  console.log("🔐 projectId:", projectId);
+  console.log("📧 clientEmail:", clientEmail);
+  console.log("🔑 privateKey starts with:", privateKey.slice(0, 30));
+  
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId,
