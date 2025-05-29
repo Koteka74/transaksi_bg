@@ -19,8 +19,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ result: "error", message: "Method not allowed" });
   }
 
-  const { judul, pesan } = req.body;
-  if (!judul || !pesan) {
+  const { title, body } = req.body;
+  if (!title || !body) {
     return res.status(400).json({ result: "error", message: "Missing title or body" });
   }
 
