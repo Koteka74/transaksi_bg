@@ -27,6 +27,9 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(sheetUrl);
+    const text = await response.text();
+    console.log("🔎 Raw response:", text); // debug
+    const data = JSON.parse(text);
     const data = await response.json();
     tokenList = data.tokens || [];
 
