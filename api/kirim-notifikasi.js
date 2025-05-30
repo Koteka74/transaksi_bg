@@ -1,5 +1,4 @@
 // api/kirim-notifikasi.js
-import { google } from "googleapis";
 import admin from "firebase-admin";
 
 if (!admin.apps.length) {
