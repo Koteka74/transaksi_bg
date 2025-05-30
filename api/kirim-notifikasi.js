@@ -52,8 +52,8 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await admin.messaging().sendMulticast(message);
-
+    const response = await admin.messaging().sendEachForMulticast(message);
+    
     // Deteksi token gagal
     const failedTokens = [];
     response.responses.forEach((resp, idx) => {
@@ -79,9 +79,10 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       result: "success",
-      successCount: response.successCount,
-      failureCount: response.failureCount,
+      successCount: response.responses.filter(r => r.success).length,
+      failureCount: response.responses.filter(r => !r.success).length,
       removed: failedTokens.length,
+      detail: response.responses,
     });
   } catch (err) {
     return res.status(500).json({ result: "error", message: "Failed to send multicast", detail: err.message });
