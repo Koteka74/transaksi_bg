@@ -1,4 +1,5 @@
 // api/kirim-notifikasi.js
+import { google } from "googleapis";
 import admin from "firebase-admin";
 
 if (!admin.apps.length) {
@@ -37,52 +38,48 @@ export default async function handler(req, res) {
     return res.status(500).json({ result: "error", message: "Failed to fetch tokens", detail: err.message });
   }
 
+  const cleaned = new Set();
+  const uniqueTokens = tokenList.filter(t => {
+    if (cleaned.has(t)) return false;
+    cleaned.add(t);
+    return true;
+  });
+  
   const message = {
-    notification: {
-      title: title,
-      body: body,
-    },
-    tokens: tokenList,
+    notification: { title, body },
+    tokens: uniqueTokens,
     webpush: {
       notification: {
-        icon: "/icons/icon-192.png",
-        badge: "/icons/icon-72.png"
+        icon: "/icons/icon-192.png"
       }
     }
   };
 
   try {
-    const response = await admin.messaging().sendEachForMulticast(message);
+    const response = await admin.messaging().sendMulticast(message);
     
     // Deteksi token gagal
-    const failedTokens = [];
+    const invalidTokens = [];
     response.responses.forEach((resp, idx) => {
       if (!resp.success) {
-        const errorCode = resp.error.code;
-        const isBadToken =
-          errorCode === "messaging/invalid-registration-token" ||
-          errorCode === "messaging/registration-token-not-registered";
-        if (isBadToken) {
-          failedTokens.push(tokenList[idx]);
+        const err = resp.error?.errorInfo?.code;
+        if (err === "messaging/invalid-registration-token" || err === "messaging/registration-token-not-registered") {
+          invalidTokens.push(uniqueTokens[idx]);
         }
       }
     });
 
     // Hapus token invalid dari Google Sheets
-    if (failedTokens.length > 0) {
-      try {
-        await fetch(sheetUrl + "?hapusTokens=" + encodeURIComponent(JSON.stringify(failedTokens)));
-      } catch (err) {
-        console.warn("⚠️ Gagal hapus token:", err.message);
-      }
+    if (invalidTokens.length > 0) {
+      await fetch(sheetUrl + "?action=delete&tokens=" + encodeURIComponent(JSON.stringify(invalidTokens)));
     }
 
     return res.status(200).json({
       result: "success",
-      successCount: response.responses.filter(r => r.success).length,
-      failureCount: response.responses.filter(r => !r.success).length,
-      removed: failedTokens.length,
-      detail: response.responses,
+      successCount: response.successCount,
+      failureCount: response.failureCount,
+      removed: invalidTokens.length,
+      detail: response.responses
     });
   } catch (err) {
     return res.status(500).json({ result: "error", message: "Failed to send multicast", detail: err.message });
