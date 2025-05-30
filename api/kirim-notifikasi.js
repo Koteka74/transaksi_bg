@@ -43,7 +43,7 @@ export default async function handler(req, res) {
   const reports = await Promise.all(tokenList.map(async (token) => {
     try {
       const message = {
-        token = token,
+        token: token,
         notification: {
           title: title,
           body: body,
