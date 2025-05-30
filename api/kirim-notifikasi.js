@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ result: "error", message: "Missing title or body" });
   }
 
-  const sheetUrl = "https://script.google.com/macros/s/AKfycbwFsPmrjoUZoxz7m55PsLqR-oGGDQ_yi3nq_U9qCh_XRCe_CfGMLuBUoDiK-Mv_I7c/exec";
+  const sheetUrl = "https://script.google.com/macros/s/AKfycby5u7UHOArYJ6St1oxrZ5eRx2ZFLU9F35XnPksIFTCB9gcUe693Idg967cmvXYav0E/exec";
   let tokenList = [];
 
   try {
