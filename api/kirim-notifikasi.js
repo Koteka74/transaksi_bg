@@ -27,11 +27,13 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(sheetUrl);
+    
     const text = await response.text();
     console.log("🔎 Raw response:", text); // debug
     const data = JSON.parse(text);
-    const data = await response.json();
-    tokenList = data.tokens || [];
+    
+    const dataJson = await response.json();
+    tokenList = dataJson.tokens || [];
 
     if (!Array.isArray(tokenList) || tokenList.length === 0) {
       return res.status(400).json({ result: "error", message: "No FCM tokens found." });
