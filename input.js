@@ -1,4 +1,5 @@
 // input.js – Final versi dengan toggle hamburger + input transaksi
+import { messaging } from './firebase-init.js'; // jika belum, pastikan firebase sudah diinisialisasi
 
 const SHEET_API_URL = '/api/proxy';
 
@@ -66,6 +67,20 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
 
       // Kirim notifikasi otomatis
       await kirimNotifikasi("Transaksi Baru", "Data pembelian berhasil disimpan.");
+
+      // Tampilkan notifikasi jika tab aktif
+      messaging.onMessage((payload) => {
+        console.log("📥 Pesan masuk di foreground:", payload);
+
+        if (Notification.permission === 'granted') {
+          const { title, body } = payload.notification;
+          new Notification(title, {
+            body,
+            icon: "/icons/icon-192.png"
+          });
+        }
+      });
+      
       setTimeout(() => notif.classList.add("hidden"), 3000);
 
     } else {
