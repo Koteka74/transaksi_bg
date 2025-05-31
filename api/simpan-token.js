@@ -10,6 +10,16 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "Token kosong" });
   }
 
+  // Cek apakah token sudah ada
+  const cekUrl = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=cek&token=${token}`;
+  const resCek = await fetch(cekUrl);
+  const cek = await resCek.json();
+
+  if (cek.exists) {
+    return res.status(200).json({ result: "duplicate" });
+  }
+
+  //simpan token
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec", {
       method: "POST",
