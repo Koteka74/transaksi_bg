@@ -1,5 +1,4 @@
 // input.js – Final versi dengan toggle hamburger + input transaksi
-import { messaging } from './firebase-init.js'; // jika belum, pastikan firebase sudah diinisialisasi
 
 const SHEET_API_URL = '/api/proxy';
 
@@ -69,6 +68,7 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       await kirimNotifikasi("Transaksi Baru", "Data pembelian berhasil disimpan.");
 
       // Tampilkan notifikasi jika tab aktif
+      import { messaging } from './firebase-init.js'; // jika belum, pastikan firebase sudah diinisialisasi
       messaging.onMessage((payload) => {
         console.log("📥 Pesan masuk di foreground:", payload);
 
