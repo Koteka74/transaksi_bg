@@ -50,3 +50,15 @@ function simpanTokenJikaBaru(token) {
 document.addEventListener("DOMContentLoaded", () => {
   ambilToken();
 });
+
+// Listener notifikasi di foreground
+messaging.onMessage((payload) => {
+  console.log("📥 Pesan masuk (foreground):", payload);
+  if (Notification.permission === "granted") {
+    const { title, body } = payload.notification;
+    new Notification(title, {
+      body,
+      icon: "/icons/icon-192.png"
+    });
+  }
+});
