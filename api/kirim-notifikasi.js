@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   }
 
   // 🔹 Ambil token dari Apps Script
-  const sheetUrl = "https://script.google.com/macros/s/AKfycby5u7UHOArYJ6St1oxrZ5eRx2ZFLU9F35XnPksIFTCB9gcUe693Idg967cmvXYav0E/exec";
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec";
   let token = [];
 
   try {
