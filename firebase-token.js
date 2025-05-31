@@ -1,64 +1,45 @@
 // firebase-token.js
+import { messaging } from "./firebase-init.js";
 
-// Ambil token dari Firebase Cloud Messaging
+document.addEventListener("DOMContentLoaded", ambilToken);
+
 async function ambilToken() {
   try {
-    const currentToken = await messaging.getToken({
-      vapidKey: "BKEmOESDGJWvHc5qSlctfHN_b5Z56eIOkUJCMXw70h0BV5Og0xWs6OkSv_rfnSIeLCMDntWjKI6HrMs6-pSD4gw"
-    });
-
+    const currentToken = await messaging.getToken({ vapidKey: "BKEmOESDGJWvHc5qSlctfHN_b5Z56eIOkUJCMXw70h0BV5Og0xWs6OkSv_rfnSIeLCMDntWjKI6HrMs6-pSD4gw" });
     if (currentToken) {
-      console.log("📱 Token FCM:", currentToken);
-      simpanTokenJikaBaru(currentToken);
+      await simpanToken(currentToken);
+
+      // Listen untuk foreground notification
+      messaging.onMessage((payload) => {
+        console.log("📥 Notifikasi masuk:", payload);
+        const { title, body } = payload.notification;
+        new Notification(title, {
+          body,
+          icon: "/icons/icon-192.png"
+        });
+      });
     } else {
-      console.warn("⚠️ Token tidak tersedia. Izin belum diberikan.");
+      console.warn("Token tidak ditemukan.");
     }
   } catch (err) {
     console.error("❌ Gagal ambil token:", err);
   }
 }
 
-// Simpan token jika belum pernah dikirim sebelumnya
-function simpanTokenJikaBaru(token) {
-  const lastToken = localStorage.getItem("savedFCMToken");
-
-  if (lastToken === token) {
-    console.log("🔁 Token FCM sudah pernah disimpan.");
-    return;
-  }
-
-  fetch("/api/simpan-token", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token })
-  })
-    .then(res => res.json())
-    .then(json => {
-      if (json.result === "success") {
-        console.log("✅ Token berhasil disimpan.");
-        localStorage.setItem("savedFCMToken", token);
-      } else {
-        console.warn("⚠️ Token tidak disimpan:", json.message);
-      }
-    })
-    .catch(err => {
-      console.error("❌ Gagal simpan token:", err);
+async function simpanToken(token) {
+  try {
+    const res = await fetch("/api/simpan-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
     });
+    const hasil = await res.json();
+    if (hasil.result === "duplicate") {
+      console.log("ℹ️ Token sudah tersimpan.");
+    } else {
+      console.log("✅ Token berhasil disimpan:", hasil);
+    }
+  } catch (err) {
+    console.error("❌ Gagal simpan token:", err);
+  }
 }
-
-// Jalankan saat halaman dimuat
-document.addEventListener("DOMContentLoaded", () => {
-  ambilToken();
-});
-
-// Listener notifikasi di foreground
-messaging.onMessage((payload) => {
-  console.log("📥 Pesan masuk (foreground):", payload);
-  if (Notification.permission === "granted") {
-    const { title, body } = payload.notification;
-    new Notification(title, {
-      body,
-      icon: "/icons/icon-192.png"
-    });
-  }
-});
