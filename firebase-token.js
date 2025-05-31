@@ -1,5 +1,4 @@
 // firebase-token.js
-import { messaging } from "./firebase-init.js";
 
 document.addEventListener("DOMContentLoaded", ambilToken);
 
