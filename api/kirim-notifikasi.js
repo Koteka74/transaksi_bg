@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   }
 
   // URL Google Apps Script Anda (untuk ambil dan hapus token)
-  const sheetUrl = "https://script.google.com/macros/s/AKfycby22rN_3-IneFFwFy9IMnr8MxUL0AAwyYa_OSplvfG_-J0PW_4jS3EZPkxlZv7Qp7E/exec";
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec";
 
   let tokenList = [];
   try {
