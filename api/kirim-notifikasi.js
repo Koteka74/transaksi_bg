@@ -1,17 +1,14 @@
-// api/kirim-notifikasi.js
 import admin from "firebase-admin";
 
-// Inisialisasi Firebase Admin
+const serviceAccount = {
+  type: "service_account",
+  project_id: process.env.PROJECT_ID,
+  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+  client_email: process.env.CLIENT_EMAIL,
+};
+
 if (!admin.apps.length) {
-  const serviceAccount = {
-    type: "service_account",
-    project_id: process.env.PROJECT_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
-    client_email: process.env.CLIENT_EMAIL,
-  };
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 }
 
 export default async function handler(req, res) {
@@ -24,62 +21,37 @@ export default async function handler(req, res) {
     return res.status(400).json({ result: "error", message: "Missing title or body" });
   }
 
+  // Ambil daftar token dari Google Sheets
   const sheetUrl = "https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec";
   let tokenList = [];
-
   try {
-    const resp = await fetch(sheetUrl);
-    const data = await resp.json();
+    const response = await fetch(sheetUrl);
+    const data = await response.json();
     tokenList = data.tokens || [];
   } catch (err) {
-    return res.status(500).json({
-      result: "error",
-      message: "Failed to fetch tokens",
-      detail: err.message,
-    });
+    return res.status(500).json({ result: "error", message: "Failed to fetch tokens" });
   }
 
-  if (!Array.isArray(tokenList) || tokenList.length === 0) {
-    return res.status(400).json({ result: "error", message: "No tokens found" });
-  }
+  const message = {
+    notification: { title, body },
+    webpush: { notification: { icon: "/icons/icon-192.png" } }
+  };
 
-  const invalidTokens = [];
-  const responses = [];
-
-  for (const token of tokenList) {
+  const results = await Promise.all(tokenList.map(async (token) => {
     try {
-      const response = await admin.messaging().send({
-        token,
-        notification: { title, body },
-        webpush: {
-          notification: {
-            icon: "/icons/icon-192.png",
-          },
-        },
-      });
-      responses.push({ token, status: "success", messageId: response });
-    } catch (error) {
-      responses.push({ token, status: "failed", error: error.message });
-      if (
-        error.code === "messaging/invalid-argument" ||
-        error.code === "messaging/registration-token-not-registered"
-      ) {
-        invalidTokens.push(token);
+      const res = await admin.messaging().send({ ...message, token });
+      return { token, status: "success", res };
+    } catch (err) {
+      console.warn("❌ Token gagal:", token, err.message);
+
+      if (err.errorInfo && err.errorInfo.code === "messaging/registration-token-not-registered") {
+        // Token tidak valid → hapus dari Sheet
+        await fetch(`${sheetUrl}?mode=delete&token=${token}`);
       }
+
+      return { token, status: "failed", error: err.message };
     }
-  }
+  }));
 
-  // Hapus token tidak valid
-  if (invalidTokens.length > 0) {
-    await fetch(
-      sheetUrl + "?hapus=" + encodeURIComponent(JSON.stringify(invalidTokens))
-    );
-  }
-
-  return res.status(200).json({
-    result: "success",
-    successCount: responses.filter(r => r.status === "success").length,
-    failureCount: responses.filter(r => r.status === "failed").length,
-    detail: responses,
-  });
+  return res.status(200).json({ result: "success", reports: results });
 }
