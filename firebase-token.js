@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("📱 Token FCM:", token);
 
         // Simpan token ke Google Sheet
-        const simpan = await fetch("https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec", {
+        const simpan = await fetch("/api/simpan-token", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
