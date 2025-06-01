@@ -68,21 +68,21 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       await kirimNotifikasi("Transaksi Baru", `Uraian: ${uraian} - data berhasil disimpan.`);
 
       // Tampilkan notifikasi jika tab aktif
-      if (firebase?.messaging) {
-        const messaging = firebase.messaging();
+      //if (firebase?.messaging) {
+        //const messaging = firebase.messaging();
 
-        messaging.onMessage((payload) => {
-          console.log("📥 Pesan masuk di foreground:", payload);
+        //messaging.onMessage((payload) => {
+          //console.log("📥 Pesan masuk di foreground:", payload);
 
-          if (Notification.permission === 'granted') {
-            const { title, body } = payload.notification;
-            new Notification(title, {
-              body,
-              icon: "/icons/icon-192.png"
-            });
-          }
-        });
-      }
+          //if (Notification.permission === 'granted') {
+            //const { title, body } = payload.notification;
+            //new Notification(title, {
+              //body,
+              //icon: "/icons/icon-192.png"
+            //});
+          //}
+        //});
+      //}
 
       
       setTimeout(() => notif.classList.add("hidden"), 3000);
