@@ -11,6 +11,18 @@ if (!admin.apps.length) {
   admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 }
 
+async function hapusTokenDiSheet(token) {
+  try {
+    const url = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=delete&token=${encodeURIComponent(token)}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    console.log("🗑️ Token dihapus dari sheet:", token, json);
+  } catch (err) {
+    console.error("❌ Gagal hapus token:", err);
+  }
+}
+
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ result: "error", message: "Method not allowed" });
@@ -48,7 +60,12 @@ export default async function handler(req, res) {
         // Token tidak valid → hapus dari Sheet
         await fetch(`${sheetUrl}?mode=delete&token=${token}`);
       }
-
+      if (
+        error.code === 'messaging/registration-token-not-registered' ||
+        error.message?.includes('registration-token-not-registered')
+      ) {
+        await hapusTokenDiSheet(token); // hapus token tidak valid
+      }
       return { token, status: "failed", error: err.message };
     }
   }));
