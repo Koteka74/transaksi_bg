@@ -68,6 +68,26 @@ form.addEventListener("submit", async function (e) {
       form.reset();
       const notif = document.getElementById("notif");
       notif.classList.remove("hidden");
+
+      // Kirim notifikasi otomatis
+      await kirimNotifikasi("Transaksi Baru", `Uraian: ${uraian} - data berhasil disimpan.`);
+
+      // Tampilkan notifikasi jika tab aktif
+      if (firebase?.messaging) {
+        const messaging = firebase.messaging();
+
+        messaging.onMessage((payload) => {
+          console.log("📥 Pesan masuk di foreground:", payload);
+
+          if (Notification.permission === 'granted') {
+            const { title, body } = payload.notification;
+            new Notification(title, {
+              body,
+              icon: "/icons/icon-192.png"
+            });
+          }
+        });
+      }
       setTimeout(() => notif.classList.add("hidden"), 3000);
     } else {
       alert("Gagal simpan: " + JSON.stringify(hasil));
@@ -77,3 +97,23 @@ form.addEventListener("submit", async function (e) {
     alert("Gagal menyimpan data operasional.");
   }
 });
+
+//kirim notifikasi
+async function kirimNotifikasi(judul, pesan) {
+  try {
+    const res = await fetch("/api/kirim-notifikasi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: judul,
+        body: pesan 
+      })
+    });
+    const hasil = await res.json();
+    console.log("📬 Notifikasi dikirim:", hasil);
+  } catch (err) {
+    console.error("❌ Gagal kirim notifikasi:", err);
+  }
+}
