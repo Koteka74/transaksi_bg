@@ -13,7 +13,7 @@ if (!admin.apps.length) {
 
 async function hapusTokenDiSheet(token) {
   try {
-    const url = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=delete&token=${encodeURIComponent(token)}`;
+    const url = `https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec?mode=delete&token=${encodeURIComponent(token)}`;
     const res = await fetch(url);
     const json = await res.json();
     console.log("🗑️ Token dihapus dari sheet:", token, json);
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
   }
 
   // Ambil daftar token dari Google Sheets
-  const sheetUrl = "https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec";
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec";
   let tokenList = [];
   try {
     const response = await fetch(sheetUrl);
