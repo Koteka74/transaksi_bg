@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   //simpan token
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
