@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   // Cek apakah token sudah ada
-  const cekUrl = `https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec?mode=cek&token=${token}`;
+  const cekUrl = `https://script.google.com/macros/s/AKfycbxeJAJSrxvaUf-IAQrfv0d0alOnOwKm-r0MOpaIRegmjxEEG2YAlBOa9Ylr1-EZmdI/exec?mode=cek&token=${token}`;
   const resCek = await fetch(cekUrl);
   const cek = await resCek.json();
 
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   //simpan token
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxeJAJSrxvaUf-IAQrfv0d0alOnOwKm-r0MOpaIRegmjxEEG2YAlBOa9Ylr1-EZmdI/exec", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
