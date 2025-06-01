@@ -60,7 +60,7 @@ async function simpanToken(token) {
 
 async function cekTokenDiSheet(token) {
   try {
-    const url = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=cek&token=${encodeURIComponent(token)}`;
+    const url = `https://script.google.com/macros/s/AKfycbxeJAJSrxvaUf-IAQrfv0d0alOnOwKm-r0MOpaIRegmjxEEG2YAlBOa9Ylr1-EZmdI/exec?mode=cek&token=${encodeURIComponent(token)}`;
     const res = await fetch(url);
     const json = await res.json();
     return json.exists === true;
