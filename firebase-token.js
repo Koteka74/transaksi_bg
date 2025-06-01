@@ -34,21 +34,38 @@ async function ambilToken() {
   }
 }
 
+//simpan token
 async function simpanToken(token) {
+  if (!token) return;
+
+  const sudahAda = await cekTokenDiSheet(token);
+  if (sudahAda) {
+    console.log("⚠️ Token sudah ada, tidak disimpan ulang.");
+    return;
+  }
+
   try {
     const res = await fetch("/api/simpan-token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token })
+      body: JSON.stringify({ token }),
     });
-    const hasil = await res.json();
-
-    if (hasil.result === "duplicate") {
-      console.log("ℹ️ Token sudah ada, tidak disimpan ulang.");
-    } else {
-      console.log("✅ Token berhasil disimpan:", hasil);
-    }
+    const json = await res.json();
+    console.log("✅ Token berhasil disimpan:", json);
   } catch (err) {
     console.error("❌ Gagal simpan token:", err);
+  }
+}
+
+
+async function cekTokenDiSheet(token) {
+  try {
+    const url = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=cek&token=${encodeURIComponent(token)}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    return json.exists === true;
+  } catch (err) {
+    console.error("❌ Gagal cek token:", err);
+    return false;
   }
 }
