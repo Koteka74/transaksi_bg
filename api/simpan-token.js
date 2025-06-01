@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   // Cek apakah token sudah ada
-  const cekUrl = `https://script.google.com/macros/s/AKfycbz4HRSg3-CaCq19mC-cUTFJU2YVBXR_vVWm5Z-P4Upyr5_riwtu6D4mHRE_w3gVGaI/exec?mode=cek&token=${token}`;
+  const cekUrl = `https://script.google.com/macros/s/AKfycbwgLAQ0xca0OFlAdXPOZTotFXSvEg7M0yoKej2mcu8ULFzid57ngCis4uHiqnZxo4U/exec?mode=cek&token=${token}`;
   const resCek = await fetch(cekUrl);
   const cek = await resCek.json();
 
