@@ -65,7 +65,7 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
       notif.classList.remove("hidden");
 
       // Kirim notifikasi otomatis
-      await kirimNotifikasi("Transaksi Baru", "Data pembelian berhasil disimpan.");
+      await kirimNotifikasi("Transaksi Baru", `Uraian: ${uraian} - data berhasil disimpan.`);
 
       // Tampilkan notifikasi jika tab aktif
       if (firebase?.messaging) {
