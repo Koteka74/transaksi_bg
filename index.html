@@ -26,7 +26,10 @@
 
 </head>
 <body class="bg-gray-100 text-gray-800">
-  <div class="flex min-h-screen relative">
+  <div class="flex min-h-screen overflow-x-hidden">
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
     
     <!-- Sidebar -->
     <aside id="sidebar"
@@ -44,11 +47,8 @@
       </nav>
     </aside>
 
-    <!-- Overlay -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
-
     <!-- Main content -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
       <!-- Topbar mobile -->
       <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
         <button id="menu-toggle" class="text-white focus:outline-none">
@@ -147,30 +147,33 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
   <script src="/firebase-init.js"></script> <!-- berisi konfigurasi Firebase -->
   <script type="module" src="firebase-token.js"></script>
+    
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const toggle = document.getElementById("menu-toggle");
       const sidebar = document.getElementById("sidebar");
       const overlay = document.getElementById("overlay");
 
+      // Toggle sidebar
       toggle.addEventListener("click", () => {
         const isHidden = sidebar.classList.contains("-translate-x-full");
         sidebar.classList.toggle("-translate-x-full");
-        sidebar.classList.toggle("translate-x-0");
         overlay.classList.toggle("hidden", !isHidden);
       });
 
+      // Klik luar sidebar tutup menu
       overlay.addEventListener("click", () => {
         sidebar.classList.add("-translate-x-full");
-        sidebar.classList.remove("translate-x-0");
         overlay.classList.add("hidden");
       });
 
       // Tutup menu setelah klik link (khusus mobile)
       document.querySelectorAll("#sidebar a").forEach(link => {
         link.addEventListener("click", () => {
-          sidebar.classList.add("-translate-x-full");
-          overlay.classList.add("hidden");
+          if (window.innerWidth < 768) {
+            sidebar.classList.add("-translate-x-full");
+            overlay.classList.add("hidden");
+          }
         });
       });
     });
