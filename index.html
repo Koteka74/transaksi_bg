@@ -154,8 +154,9 @@
       const overlay = document.getElementById("overlay");
 
       toggle.addEventListener("click", () => {
-        sidebar.classList.toggle("-translate-x-full");
-        overlay.classList.toggle("hidden");
+        const isHidden = sidebar.classList.contains("-translate-x-full");
+        sidebar.classList.toggle("-translate-x-full", !isHidden);
+        overlay.classList.toggle("hidden", !isHidden);
       });
 
       overlay.addEventListener("click", () => {
@@ -163,6 +164,7 @@
         overlay.classList.add("hidden");
       });
 
+      // Tutup menu setelah klik link (khusus mobile)
       document.querySelectorAll("#sidebar a").forEach(link => {
         link.addEventListener("click", () => {
           sidebar.classList.add("-translate-x-full");
