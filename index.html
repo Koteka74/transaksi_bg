@@ -11,15 +11,28 @@
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#1d4ed8" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-  
+  <style>
+    @font-face {
+      font-family: 'Halo Dek';
+      src: url('/fonts/HaloDek.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    .font-halo {
+      font-family: 'Halo Dek', cursive;
+    }
+  </style>
+
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
     <!-- Sidebar -->
     <aside id="sidebar"
       class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-      <div class="p-4 border-b border-blue-700">
-        <h2 class="text-xl font-bold pl-1">Menu</h2>
+      <div class="p-4 border-b border-blue-700 flex items-center space-x-3">
+        <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+        <h2 class="text-2xl font-halo tracking-wider">BAKSO GARASI</h2>
       </div>
       <nav class="p-4 space-y-4">
         <a href="index.html" class="block text-blue-200 font-bold">🏠 Dashboard</a>
@@ -130,5 +143,30 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
   <script src="/firebase-init.js"></script> <!-- berisi konfigurasi Firebase -->
   <script type="module" src="firebase-token.js"></script>
+  <script>
+    const sidebar = document.getElementById("sidebar");
+    const toggle = document.getElementById("menu-toggle");
+
+    if (toggle && sidebar) {
+      toggle.addEventListener("click", () => {
+        sidebar.classList.toggle("-translate-x-full");
+      });
+
+      // Tutup saat klik link
+      document.querySelectorAll("#sidebar a").forEach(link => {
+        link.addEventListener("click", () => {
+          sidebar.classList.add("-translate-x-full");
+        });
+      });
+
+      // Tutup saat klik di luar sidebar (khusus mobile)
+      document.addEventListener("click", function (e) {
+        const isClickInside = sidebar.contains(e.target) || toggle.contains(e.target);
+        if (!isClickInside && window.innerWidth < 768) {
+          sidebar.classList.add("-translate-x-full");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
