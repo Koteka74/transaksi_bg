@@ -27,13 +27,10 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen overflow-x-hidden">
-
-    <!-- Overlay -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
     
     <!-- Sidebar -->
     <aside id="sidebar"
-      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:relative">
+      class="fixed top-0 left-0 z-40 w-64 h-full bg-blue-800 text-white shadow transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:relative md:top-auto md:left-auto md:h-auto">
       <div class="p-4 border-b border-blue-700 flex items-center space-x-3">
         <img src="/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
         <h2 class="text-2xl font-halo tracking-wider">BAKSO GARASI</h2>
@@ -47,6 +44,9 @@
       </nav>
     </aside>
 
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+    
     <!-- Main content -->
     <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
       <!-- Topbar mobile -->
@@ -150,23 +150,21 @@
     
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const toggle = document.getElementById("menu-toggle");
       const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
       const overlay = document.getElementById("overlay");
 
-      // Toggle sidebar
       function showSidebar() {
         sidebar.classList.remove("-translate-x-full");
         overlay.classList.remove("hidden");
       }
 
-      // Klik luar sidebar tutup menu
       function hideSidebar() {
         sidebar.classList.add("-translate-x-full");
         overlay.classList.add("hidden");
       }
 
-      toggle.addEventListener("click", () => {
+      toggle?.addEventListener("click", () => {
         if (sidebar.classList.contains("-translate-x-full")) {
           showSidebar();
         } else {
@@ -174,7 +172,7 @@
         }
       });
 
-      overlay.addEventListener("click", () => {
+      overlay?.addEventListener("click", () => {
         hideSidebar();
       });
 
