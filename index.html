@@ -36,14 +36,88 @@
     .font-halo {
       font-family: 'HaloDek', sans-serif;
     }
+
+    /* Fixed header styling */
+    #top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+    }
+
+    /* Padding untuk konten agar tidak tertutup header */
+    #main-content {
+      padding-top: 3.5rem; /* Sesuaikan dengan tinggi header */
+    }
+
+    /* animasi smoother saat scroll */
+    #top-header {
+      transition: transform 0.3s ease;
+    }
+
+    .scrolled #top-header {
+      transform: translateY(-100%);
+    }
+
+    /* efek shadow */
+    #top-header {
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Animasi Spinner */
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(239, 68, 68, 0.2);
+      border-radius: 50%;
+      border-top-color: #ef4444;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Pulse animation untuk teks */
+    .pulse-text {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
 
-    <!-- Overlay untuk mobile -->
-     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center z-50">
+      <!-- Spinner Keren -->
+      <div class="spinner mb-4"></div>
     
+      <!-- Teks Loading dengan animasi -->
+      <div class="text-center">
+        <h2 class="text-xl font-bold font-halo text-red-600 pulse-text">MEMUAT DATA</h2>
+        <p class="text-gray-600 mt-2">BAKSO GARASI</p>
+      </div>
+    </div>
+
+    <!-- Overlay untuk mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    
+    <!-- Fixed Top Header -->
+    <header id="top-header" class="bg-blue-800 text-white p-3 flex items-center justify-between fixed top-0 left-0 right-0 z-20">
+      <button id="menu-toggle" class="text-white focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <span class="text-lg font-semibold pl-2">Dashboard</span>
+    </header>
+
     <!-- Sidebar -->
     <aside id="sidebar"
       class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transition-transform duration-300 ease-in-out">
@@ -63,20 +137,9 @@
     </aside>
 
     <!-- Main content -->
-    <div id="main-content" class="flex-1 flex flex-col md:ml-64">
-      <!-- Topbar mobile -->
-      <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
-        <button id="menu-toggle" class="text-white focus:outline-none">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-        <span class="text-lg font-semibold pl-2">Dashboard</span>
-      </header>
-
-    <!-- Main content -->
+    <div id="main-content" class="hidden">
     <main class="flex-1 p-4 space-y-4">
-      <h1 class="text-2xl font-bold ml-4 md:ml-0">Dashboard Pengeluaran BAKSO GARASI</h1>
+      <h1 class="text-2xl font-bold ml-0 md:ml-0">Dashboard Pengeluaran BAKSO GARASI</h1>
 
       <!-- Label Periode dan Filter -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -197,6 +260,23 @@
       handleResize(); // Panggil sekali saat pertama kali load
     });
   </script>
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Simulasi loading data
+      setTimeout(function() {
+        // Sembunyikan loading overlay
+        document.getElementById('loading-overlay').classList.add('hidden');
+        // Tampilkan konten utama
+        document.getElementById('main-content').classList.remove('hidden');
+        
+        // Tambahkan efek transisi halus
+        document.getElementById('main-content').classList.add('opacity-0');
+        setTimeout(() => {
+          document.getElementById('main-content').classList.remove('opacity-0');
+          document.getElementById('main-content').classList.add('opacity-100');
+        }, 50);
+      }, 2500); // Waktu loading 2 detik (sesuaikan dengan kebutuhan)
+    });
+  </script>
 </body>
 </html>

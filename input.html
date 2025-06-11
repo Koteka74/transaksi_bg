@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,14 +6,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Input Pembelian Bahan</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preload" href="/fonts/HaloDek.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    /* Load custom font */
+    @font-face {
+      font-family: 'HaloDek';
+      src: url('/fonts/HaloDek.ttf') format('truetype');
+      font-display: swap;
+    }
+    /* Pastikan sidebar di luar layar saat awal di mobile */
+    #sidebar {
+      transform: translateX(-100%);
+    }
+    /* Untuk desktop, pastikan sidebar terlihat */
+    @media (min-width: 768px) {
+      #sidebar {
+        transform: translateX(0);
+      }
+      #main-content {
+        margin-left: 16rem; /* Sesuai dengan lebar sidebar (64 = 16rem) */
+      }
+    }
+    /* Custom font class */
+    .font-halo {
+      font-family: 'HaloDek', sans-serif;
+    }
+
+    /* Fixed header styling */
+    #top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+    }
+
+    /* Padding untuk konten agar tidak tertutup header */
+    #main-content {
+      padding-top: 3.5rem; /* Sesuaikan dengan tinggi header */
+    }
+
+    /* animasi smoother saat scroll */
+    #top-header {
+      transition: transform 0.3s ease;
+    }
+
+    .scrolled #top-header {
+      transform: translateY(-100%);
+    }
+  </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
+
+    <!-- Overlay untuk mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    
+    <!-- Topbar mobile -->
+    <header id="top-header" class="bg-blue-800 text-white p-3 flex items-center justify-between fixed top-0 left-0 right-0 z-20">
+      <button id="menu-toggle" class="text-white focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <span class="text-lg font-semibold pl-2">Input Pengeluaran HPP</span>
+    </header>
+
     <!-- Sidebar -->
     <aside id="sidebar"
-      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-      <div class="p-4 border-b border-blue-700">
-        <h2 class="text-xl font-bold pl-1">Menu</h2>
+      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transition-transform duration-300 ease-in-out">
+      <div class="p-4 border-b border-blue-700 flex items-center gap-4">
+        <!-- Logo -->
+        <img src="/logo.png" alt="Logo Bakso Garasi" class="w-8 h-8 md:w-10 md:h-10">
+        <!-- Judul Menu dengan custom font -->
+        <h2 class="text-xl text-yellow-600 font-halo">BAKSO GARASI</h2>
       </div>
       <nav class="p-4 space-y-4">
         <a href="index.html" class="block hover:text-blue-200 font-medium">🏠 Dashboard</a>
@@ -24,17 +91,7 @@
     </aside>
 
     <!-- Main content -->
-    <div class="flex-1 flex flex-col">
-      <!-- Topbar mobile -->
-      <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
-        <button id="menu-toggle" class="text-white focus:outline-none">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-        <span class="text-lg font-semibold pl-2">Menu</span>
-      </header>
-
+    <div class="flex-1 flex flex-col md:ml-64">
       <!-- Form input -->
       <main class="p-4 bg-gray-100 flex-1">
         <h1 class="text-2xl font-bold mb-4">Input Biaya HPP</h1>
@@ -76,5 +133,40 @@
   <script src="firebase-init.js"></script>
   <script src="firebase-token.js"></script>
   <script src="input.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const menuToggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('overlay');
+      
+      // Toggle sidebar di mobile
+      menuToggle.addEventListener('click', function() {
+        if (sidebar.style.transform === 'translateX(0px)') {
+          sidebar.style.transform = 'translateX(-100%)';
+          overlay.classList.add('hidden');
+        } else {
+          sidebar.style.transform = 'translateX(0)';
+          overlay.classList.remove('hidden');
+        }
+      });
+      
+      // Tutup sidebar saat klik overlay
+      overlay.addEventListener('click', function() {
+        sidebar.style.transform = 'translateX(-100%)';
+        overlay.classList.add('hidden');
+      });
+      
+      // Handle resize untuk desktop
+      function handleResize() {
+        if (window.innerWidth >= 768) {
+          sidebar.style.transform = 'translateX(0)';
+          overlay.classList.add('hidden');
+        }
+      }
+      
+      window.addEventListener('resize', handleResize);
+      handleResize(); // Panggil sekali saat pertama kali load
+    });
+  </script>
 </body>
 </html>
