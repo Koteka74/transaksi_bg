@@ -11,49 +11,66 @@
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#1d4ed8" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="preload" href="/fonts/HaloDek.ttf" as="font" type="font/ttf" crossorigin>
   <style>
+    /* Load custom font */
     @font-face {
-      font-family: 'Halo Dek';
+      font-family: 'HaloDek';
       src: url('/fonts/HaloDek.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
+      font-display: swap;
     }
-
+    /* Pastikan sidebar di luar layar saat awal di mobile */
+    #sidebar {
+      transform: translateX(-100%);
+    }
+    /* Untuk desktop, pastikan sidebar terlihat */
+    @media (min-width: 768px) {
+      #sidebar {
+        transform: translateX(0);
+      }
+      #main-content {
+        margin-left: 16rem; /* Sesuai dengan lebar sidebar (64 = 16rem) */
+      }
+    }
+    /* Custom font class */
     .font-halo {
-      font-family: 'Halo Dek', cursive;
+      font-family: 'HaloDek', sans-serif;
     }
   </style>
-
 </head>
 <body class="bg-gray-100 text-gray-800">
+  <div class="flex min-h-screen">
 
-  <!-- Overlay -->
-  <div id="overlay" class="fixed inset-0 z-30 bg-black bg-opacity-40 hidden md:hidden transition-opacity duration-300"></div>
+    <!-- Overlay untuk mobile -->
+     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
     
-  <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-blue-800 text-white transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
-    <div class="flex items-center space-x-2 p-4 border-b border-blue-700">
-      <img src="logo.png" alt="Logo" class="w-10 h-10 mr-2">
-      <h2 class="text-2xl font-halo tracking-wider">BAKSO GARASI</h2>
-    </div>
-    <nav class="p-4 space-y-4">
-      <a href="index.html" class="block text-blue-200 font-bold">🏠 Dashboard</a>
-      <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian Bahan</a>
-      <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian Bahan</a>
-      <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
-      <a href="input_operasional.html" class="block hover:text-blue-200 font-medium">➕ Input Operasional</a>
-    </nav>
-  </aside>
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="fixed z-40 inset-y-0 left-0 w-64 bg-blue-800 text-white shadow-lg transition-transform duration-300 ease-in-out">
+      <div class="p-4 border-b border-blue-700 flex items-center gap-4">
+        <!-- Logo -->
+        <img src="/logo.png" alt="Logo Bakso Garasi" class="w-8 h-8 md:w-10 md:h-10">
+        <!-- Judul Menu dengan custom font -->
+        <h2 class="text-xl text-yellow-600 font-halo">BAKSO GARASI</h2>
+      </div>
+      <nav class="p-4 space-y-4">
+        <a href="index.html" class="block text-blue-200 font-bold">🏠 Dashboard</a>
+        <a href="data.html" class="block hover:text-blue-200 font-medium">📊 Data Pembelian Bahan</a>
+        <a href="input.html" class="block hover:text-blue-200 font-medium">➕ Input Pembelian Bahan</a>
+        <a href="data_operasional.html" class="block hover:text-blue-200 font-medium">🧾 Data Operasional</a>
+        <a href="input_operasional.html" class="block hover:text-blue-200 font-medium">➕ Input Operasional</a>
+      </nav>
+    </aside>
 
-    
-    <div class="flex min-h-screen overflow-x-hidden">
+    <!-- Main content -->
+    <div id="main-content" class="flex-1 flex flex-col md:ml-64">
       <!-- Topbar mobile -->
       <header class="md:hidden bg-blue-800 text-white p-3 flex items-center justify-between">
-        <!-- Tombol hamburger (muncul hanya di mobile) -->
-        <button id="menu-toggle" class="md:hidden p-4 text-white bg-blue-800 fixed top-0 left-0 z-50">
-          ☰
+        <button id="menu-toggle" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
-
         <span class="text-lg font-semibold pl-2">Dashboard</span>
       </header>
 
@@ -78,12 +95,12 @@
 
       <!-- Info Cards -->
       <div id="rekapOperasional" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div class="bg-white p-4 rounded shadow">
+        <div class="bg-white p-2 rounded shadow">
           <h2 class="font-medium font-semibold mb-2">Total Pengeluaran Operasional</h2>
           <p id="totalOperasional" class="text-2xl font-bold text-red-600">Rp 0</p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Total Biaya Gaji</h2>
+          <h2 class="text-sm font-semibold mb-2">Total Biaya Gaji</h2>
           <p id="totalGaji" class="text-2xl font-bold text-red-600">Rp 0</p>
         </div>
       </div>
@@ -145,33 +162,41 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
   <script src="/firebase-init.js"></script> <!-- berisi konfigurasi Firebase -->
   <script type="module" src="firebase-token.js"></script>
-    
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const toggle = document.getElementById("menu-toggle");
-      const sidebar = document.getElementById("sidebar");
-      const overlay = document.getElementById("overlay");
-
-      toggle.addEventListener("click", () => {
-        sidebar.classList.toggle("-translate-x-full");
-        overlay.classList.toggle("hidden");
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const menuToggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('overlay');
+      
+      // Toggle sidebar di mobile
+      menuToggle.addEventListener('click', function() {
+        if (sidebar.style.transform === 'translateX(0px)') {
+          sidebar.style.transform = 'translateX(-100%)';
+          overlay.classList.add('hidden');
+        } else {
+          sidebar.style.transform = 'translateX(0)';
+          overlay.classList.remove('hidden');
+        }
       });
-
-      overlay.addEventListener("click", () => {
-        sidebar.classList.add("-translate-x-full");
-        overlay.classList.add("hidden");
+      
+      // Tutup sidebar saat klik overlay
+      overlay.addEventListener('click', function() {
+        sidebar.style.transform = 'translateX(-100%)';
+        overlay.classList.add('hidden');
       });
-
-      // Tutup sidebar saat klik link di dalam nav (opsional)
-      sidebar.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
-          if (window.innerWidth < 768) {
-            sidebar.classList.add("-translate-x-full");
-            overlay.classList.add("hidden");
-          }
-        });
-      });
+      
+      // Handle resize untuk desktop
+      function handleResize() {
+        if (window.innerWidth >= 768) {
+          sidebar.style.transform = 'translateX(0)';
+          overlay.classList.add('hidden');
+        }
+      }
+      
+      window.addEventListener('resize', handleResize);
+      handleResize(); // Panggil sekali saat pertama kali load
     });
   </script>
+
 </body>
 </html>
