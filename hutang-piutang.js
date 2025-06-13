@@ -1,6 +1,6 @@
 // hutang-piutang.js
 
-const SHEET_API_URL = '/api/proxy';
+const SHEET_API_URL = '/api/kirim-hutangpiutang';
 
 // Submit form hutang/piutang
 document.getElementById("formHutangPiutang").addEventListener("submit", async function (e) {
