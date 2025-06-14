@@ -1,6 +1,6 @@
 // api/kirim-hutangpiutang.js
 
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycby6PdnOBYLzrPdkib8obsYMWGNjDHaDXcLSBjZI_IT6_4Epy1sg_suhtXantZ__rvg/exec";
 
 export default async function handler(req, res) {
   // Handle POST request
