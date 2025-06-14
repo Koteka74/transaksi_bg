@@ -59,7 +59,7 @@ document.getElementById("formHutangPiutang").addEventListener("submit", async fu
 // Menampilkan data dari sheet
 async function loadDataHutangPiutang() {
   try {
-    const res = await fetch("/api/proxy?sheet=HutangPiutang");
+    const res = await fetch("/api/kirim-hutangpiutang?sheet=HutangPiutang");
     const json = await res.json();
     const data = json.data || [];
 
