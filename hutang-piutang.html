@@ -54,7 +54,7 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 p-6">
+<body class="bg-gray-100 text-gray-800">
   <div class="flex min-h-screen">
     
     <!-- Overlay untuk mobile -->
@@ -90,65 +90,58 @@
     </aside>
 
     <!-- Main content -->
-    <div class="max-w-4xl mx-auto md:ml-64">
+    <div class="flex-1 flex flex-col md:ml-64">
       <!-- Form Input -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 class="text-xl font-bold mb-4">Tambah Data Baru</h2>
-        <form id="formInput" class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium mb-1">Tanggal</label>
-              <input type="date" name="tanggal" class="w-full p-2 border rounded" required>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Uraian</label>
-              <input type="text" name="uraian" class="w-full p-2 border rounded" required>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Jenis</label>
-              <select name="jenis" class="w-full p-2 border rounded" required>
-                <option value="Hutang">Hutang</option>
-                <option value="Piutang">Piutang</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Jumlah</label>
-              <input type="number" name="jumlah" class="w-full p-2 border rounded" required>
-            </div>
-          
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2">
-              <span id="submit-text">Simpan</span>
-              <svg id="submit-spinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            </button>
-            <div id="notifHP" class="hidden fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded"></div>
-          </div>
-        </form>
-      </div>
+      <main class="p-4 bg-gray-100 flex-1 mt-8">
+        <h1 class="text-xl font-bold py-6">Hutang / Piutang</h1>
 
-      <!-- Tabel Data -->
-      <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4">Data Hutang/Piutang</h2>
+        <form id="formHP" class="space-y-4 max-w-xl mb-6">
+          <div>
+            <label for="jenis" class="block font-semibold">Jenis</label>
+            <select id="jenis" class="w-full p-2 border rounded">
+              <option value="Hutang">Hutang</option>
+              <option value="Piutang">Piutang</option>
+            </select>
+          </div>
+          <div>
+            <label for="tanggal" class="block font-semibold">Tanggal</label>
+            <input type="date" id="tanggal" class="w-full p-2 border rounded">
+          </div>
+          <div>
+            <label for="uraian" class="block font-semibold">Uraian</label>
+            <input type="text" id="uraian" class="w-full p-2 border rounded">
+          </div>
+          <div>
+            <label for="jumlah" class="block font-semibold">Jumlah</label>
+            <input type="text" id="jumlah" class="w-full p-2 border rounded" placeholder="Contoh: 150000">
+          </div>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2">
+            <span id="submit-text">Simpan</span>
+            <svg id="submit-spinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+        </form>
+
+        <div id="notif" class="hidden bg-green-100 text-green-800 p-3 rounded mb-4">✅ Data berhasil disimpan!</div>
+
+        <h2 class="text-xl font-bold mb-2">Riwayat Transaksi</h2>
         <div class="overflow-x-auto">
-          <table id="tabelData" class="min-w-full divide-y divide-gray-200">
-            <thead>
+          <table class="min-w-full bg-white border rounded">
+            <thead class="bg-blue-100">
               <tr>
-                <th class="px-4 py-2">Tanggal</th>
-                <th class="px-4 py-2">Uraian</th>
-                <th class="px-4 py-2">Hutang</th>
-                <th class="px-4 py-2">Piutang</th>
-                <th class="px-4 py-2">Jumlah</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <!-- Data akan diisi via JavaScript -->
-            </tbody>
+                <th class="p-2 border">Tanggal</th>
+                <th class="p-2 border">Uraian</th>
+                <th class="p-2 border">Hutang</th>
+                <th class="p-2 border">Piutang</th>
+                <th class="p-2 border">Saldo</th>
+                </tr>
+              </thead>
+            <tbody id="tabelHP"></tbody>
           </table>
         </div>
-      </div>
-      
+      </main>
     </div>
   </div>
   
@@ -186,61 +179,6 @@
       
       window.addEventListener('resize', handleResize);
       handleResize(); // Panggil sekali saat pertama kali load
-    });
-  </script>
-  <script>
-    // Muat data saat halaman terbuka
-    document.addEventListener('DOMContentLoaded', muatData);
-
-    // Fungsi untuk memuat data dari sheet
-    function muatData() {
-      google.script.run
-        .withSuccessHandler((data) => {
-          const tabelBody = document.querySelector('#tabelData tbody');
-          tabelBody.innerHTML = '';
-
-          data.forEach((row) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="px-4 py-2">${formatTanggal(row[0])}</td>
-              <td class="px-4 py-2">${row[1] || ''}</td>
-              <td class="px-4 py-2">${row[2] ? 'Rp ' + row[2].toLocaleString() : ''}</td>
-              <td class="px-4 py-2">${row[3] ? 'Rp ' + row[3].toLocaleString() : ''}</td>
-              <td class="px-4 py-2">Rp ${row[4].toLocaleString()}</td>
-            `;
-            tabelBody.appendChild(tr);
-          });
-        })
-        .ambilData();
-    }
-
-    // Format tanggal dari Apps Script ke format lokal
-    function formatTanggal(dateValue) {
-      if (!dateValue) return '';
-      const date = new Date(dateValue);
-      return date.toLocaleDateString('id-ID');
-    }
-
-    // Handle form submit
-    document.getElementById('formInput').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const formData = {
-        tanggal: e.target.tanggal.value,
-        uraian: e.target.uraian.value,
-        jenis: e.target.jenis.value,
-        jumlah: e.target.jumlah.value
-      };
-
-      google.script.run
-        .withSuccessHandler(() => {
-          alert('Data berhasil disimpan!');
-          e.target.reset();
-          muatData(); // Refresh tabel
-        })
-        .withFailureHandler((err) => {
-          alert('Error: ' + err.message);
-        })
-        .simpanData(formData);
     });
   </script>
   <script src="hutang-piutang.js"></script>

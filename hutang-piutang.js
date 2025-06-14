@@ -1,108 +1,67 @@
-/**
- * Hutang-Piutang Manager
- * Kode siap pakai untuk integrasi dengan Google Apps Script
- */
+// hutang-piutang.js
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("formHP");
+  const notif = document.getElementById("notif");
+  const tabel = document.getElementById("tabelHP");
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Inisialisasi
-    initApp();
-});
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const jenis = document.getElementById("jenis").value;
+    const tanggal = document.getElementById("tanggal").value;
+    const uraian = document.getElementById("uraian").value;
+    const jumlah = document.getElementById("jumlah").value.replace(/\./g, "");
 
-function initApp() {
-    // Load data saat pertama kali dibuka
-    loadData();
-    
-    // Setup form submission
-    const form = document.getElementById('formInput');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveData();
-        });
-    } else {
-        console.error("Form dengan ID 'formInput' tidak ditemukan!");
-    }
-}
-
-function loadData() {
-    // Pastikan google.script.run tersedia
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-            .withSuccessHandler(displayData)
-            .withFailureHandler(showError)
-            .ambilData();
-    } else {
-        console.error("Google script API tidak tersedia. Pastikan diakses melalui Web App Google.");
-        // Tampilkan pesan ke pengguna
-        alert("Aplikasi ini harus diakses melalui link Web App Google. Jangan buka file HTML langsung.");
-    }
-}
-
-function saveData() {
-    const form = document.getElementById('formInput');
-    const data = {
-        tanggal: form.tanggal.value,
-        uraian: form.uraian.value,
-        jenis: form.jenis.value,
-        jumlah: form.jumlah.value
-    };
-
-    // Validasi input
-    if (!data.tanggal || !data.uraian || !data.jumlah) {
-        alert("Harap isi semua field yang wajib diisi!");
-        return;
+    if (!tanggal || !uraian || !jumlah) {
+      alert("Isi semua data");
+      return;
     }
 
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-            .withSuccessHandler(function() {
-                alert("Data berhasil disimpan!");
-                form.reset();
-                loadData(); // Refresh data
-            })
-            .withFailureHandler(showError)
-            .simpanData(data);
+    try {
+      const res = await fetch("/api/kirim-hutangpiutang", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Tanggal: tanggal, Uraian: uraian, Jenis: jenis, Jumlah: jumlah }),
+      });
+
+      const json = await res.json();
+      console.log("✅ Simpan:", json);
+
+      if (json.result === "success") {
+        form.reset();
+        notif.classList.remove("hidden");
+        setTimeout(() => notif.classList.add("hidden"), 3000);
+        loadData();
+      } else {
+        alert("Gagal simpan");
+      }
+    } catch (err) {
+      console.error("❌ Error simpan:", err);
+      alert("Gagal mengirim data.");
     }
-}
+  });
 
-function displayData(dataFromSheet) {
-    const tableBody = document.querySelector('#tabelData tbody');
-    if (!tableBody) return;
+  async function loadData() {
+    try {
+      const res = await fetch("/api/proxy?sheet=HutangPiutang");
+      const json = await res.json();
+      const data = json.data || [];
 
-    // Kosongkan tabel
-    tableBody.innerHTML = '';
-
-    // Isi dengan data baru
-    dataFromSheet.forEach((row, index) => {
-        const tr = document.createElement('tr');
-        tr.className = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
-        
+      tabel.innerHTML = "";
+      data.forEach(row => {
+        const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="px-4 py-2 border">${formatDate(row[0])}</td>
-            <td class="px-4 py-2 border">${row[1] || '-'}</td>
-            <td class="px-4 py-2 border text-right">${row[2] ? formatCurrency(row[2]) : '-'}</td>
-            <td class="px-4 py-2 border text-right">${row[3] ? formatCurrency(row[3]) : '-'}</td>
-            <td class="px-4 py-2 border text-right font-medium">${formatCurrency(row[4])}</td>
+          <td class="p-2 border">${row.Tanggal}</td>
+          <td class="p-2 border">${row.Uraian}</td>
+          <td class="p-2 border text-right">${row.Hutang || ""}</td>
+          <td class="p-2 border text-right">${row.Piutang || ""}</td>
+          <td class="p-2 border text-right">${row.Saldo || ""}</td>
         `;
-        tableBody.appendChild(tr);
-    });
-}
+        tabel.appendChild(tr);
+      });
+    } catch (err) {
+      console.error("❌ Gagal load data:", err);
+    }
+  }
 
-function formatDate(dateString) {
-    if (!dateString) return '-';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-}
-
-function formatCurrency(amount) {
-    return 'Rp ' + parseFloat(amount).toLocaleString('id-ID');
-}
-
-function showError(error) {
-    console.error("Error:", error);
-    alert("Terjadi kesalahan: " + error.message);
-}
+  loadData();
+});
