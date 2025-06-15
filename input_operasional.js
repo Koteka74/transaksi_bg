@@ -39,6 +39,9 @@ form.addEventListener("submit", async function (e) {
   const debet = debetFormatted.replace(/\./g, "").replace(/,/g, "");
   const kredit = kreditFormatted.replace(/\./g, "").replace(/,/g, "");
 
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.classList.add('loading');
+
   if (!tanggal || !uraian || (!debet && !kredit)) {
     alert("Tanggal, Uraian, dan minimal Debet atau Kredit wajib diisi.");
     return;
@@ -95,6 +98,8 @@ form.addEventListener("submit", async function (e) {
   } catch (err) {
     console.error("❌ Gagal kirim:", err);
     alert("Gagal menyimpan data operasional.");
+  } finally {
+    submitBtn.classList.remove('loading');
   }
 });
 
