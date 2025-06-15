@@ -1,72 +1,91 @@
-// hutang-piutang.js
+const SHEET_API_URL = "/api/kirim-hutangpiutang?sheet=HutangPiutang";
+const POST_API_URL = "/api/kirim-hutangpiutang";
+
 document.addEventListener("DOMContentLoaded", () => {
+  tampilkanDataHutangPiutang();
+
   const form = document.getElementById("formHP");
-  const notif = document.getElementById("notif");
-  const tabel = document.getElementById("tabelHP");
+  if (form) {
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const jenis = document.getElementById("jenisTransaksi").value;
+      const tanggal = document.getElementById("tanggalHP").value;
+      const uraian = document.getElementById("uraianHP").value;
+      const jumlahRaw = document.getElementById("jumlahHP").value;
+      const jumlah = jumlahRaw.replace(/\./g, "").replace(/,/g, "");
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const jenis = document.getElementById("jenis").value;
-    const tanggal = document.getElementById("tanggal").value;
-    const uraian = document.getElementById("uraian").value;
-    const jumlah = document.getElementById("jumlah").value.replace(/\./g, "");
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    submitBtn.classList.add('loading');
-    
-    if (!tanggal || !uraian || !jumlah) {
-      alert("Isi semua data");
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/kirim-hutangpiutang", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Tanggal: tanggal, Uraian: uraian, Jenis: jenis, Jumlah: jumlah }),
-      });
-
-      const json = await res.json();
-      console.log("✅ Simpan:", json);
-
-      if (json.result === "success") {
-        form.reset();
-        notif.classList.remove("hidden");
-        setTimeout(() => notif.classList.add("hidden"), 3000);
-        loadData();
-      } else {
-        alert("Gagal simpan");
+      if (!tanggal || !uraian || !jumlah) {
+        alert("Semua field wajib diisi.");
+        return;
       }
-    } catch (err) {
-      console.error("❌ Error simpan:", err);
-      alert("Gagal mengirim data.");
-    } finally {
-      submitBtn.classList.remove('loading');
-    }
-  });
 
-  async function loadData() {
-    try {
-      const res = await fetch("/api/kirim-hutangpiutang?sheet=HutangPiutang");
-      const json = await res.json();
-      const data = json.data || [];
+      const data = {
+        Tanggal: tanggal,
+        Uraian: uraian,
+        Hutang: jenis === "hutang" ? jumlah : "",
+        Piutang: jenis === "piutang" ? jumlah : ""
+      };
 
-      tabel.innerHTML = "";
-      data.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="p-2 border">${row.Tanggal}</td>
-          <td class="p-2 border">${row.Uraian}</td>
-          <td class="p-2 border text-right">${row.Hutang || ""}</td>
-          <td class="p-2 border text-right">${row.Piutang || ""}</td>
-          <td class="p-2 border text-right">${row.Saldo || ""}</td>
-        `;
-        tabel.appendChild(tr);
-      });
-    } catch (err) {
-      console.error("❌ Gagal load data:", err);
-    }
+      try {
+        const res = await fetch(POST_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const hasil = await res.json();
+        console.log("✅ Respons:", hasil);
+
+        if (hasil.result === "success") {
+          document.getElementById("formHP").reset();
+          tampilkanDataHutangPiutang();
+        } else {
+          alert("Gagal simpan data.");
+        }
+      } catch (err) {
+        console.error("❌ Gagal kirim:", err);
+        alert("Gagal menyimpan data.");
+      }
+    });
   }
-
-  loadData();
 });
+
+async function tampilkanDataHutangPiutang() {
+  try {
+    const res = await fetch(SHEET_API_URL);
+    const json = await res.json();
+    const data = json.data || [];
+
+    const tbody = document.getElementById("tbodyHP");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    data.forEach(row => {
+      const tr = buatBarisTabel(row);
+      tbody.appendChild(tr);
+    });
+
+  } catch (err) {
+    console.error("❌ Gagal ambil data Hutang Piutang:", err);
+  }
+}
+
+function buatBarisTabel(row) {
+  const tr = document.createElement("tr");
+
+  const tgl = new Date(row.Tanggal);
+  const tglFormatted = !isNaN(tgl) ? tgl.toLocaleDateString("id-ID") : row.Tanggal;
+
+  tr.innerHTML = `
+    <td class="border px-2 py-1">${tglFormatted}</td>
+    <td class="border px-2 py-1">${row.Uraian || ""}</td>
+    <td class="border px-2 py-1 text-right">${formatRupiah(row.Hutang || "")}</td>
+    <td class="border px-2 py-1 text-right">${formatRupiah(row.Piutang || "")}</td>
+    <td class="border px-2 py-1 text-right">${formatRupiah(row.Jumlah || "")}</td>
+  `;
+  return tr;
+}
+
+function formatRupiah(angka) {
+  const num = Number(angka.toString().replace(/[^\d]/g, ""));
+  return isNaN(num) ? "" : num.toLocaleString("id-ID");
+}
