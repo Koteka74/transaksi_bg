@@ -1,37 +1,25 @@
 // api/proxy.js
 
-const url = "https://script.google.com/macros/s/AKfycbyqujIBHIkPfXMdqvwwzwufWyf42wvJfldLdGz2kb8k1ggfWqIyghCBVNvKT-smTmw/exec";
-
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    try {
-      const response = await fetch(SHEET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body)
-      });
+  const url = "https://script.google.com/macros/s/AKfycbxo7859kAtaphc9ddgacR4aCZRk-dOeYWi-NYJx6nksBtnRLq_g5_5J0_7R3jthQk8/exec";
 
-      const result = await response.json();
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ result: 'error', message: error.message });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
   }
 
-  else if (req.method === 'GET') {
-    const sheet = req.query.sheet || ''; // ?sheet=HutangPiutang
-    const url = `${SHEET_URL}?sheet=${sheet}`;
+  try {
+    const googleRes = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(req.body),
+    });
 
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ result: 'error', message: error.message });
-    }
-  }
+    const json = await googleRes.json(); // ubah jadi JSON langsung
+    return res.status(200).json(json);   // jangan bungkus ulang
 
-  else {
-    return res.status(405).json({ result: 'error', message: 'Method not allowed' });
+  } catch (error) {
+    return res.status(500).json({ error: "Gagal kirim ke Google Apps Script", detail: error.message });
   }
 }
