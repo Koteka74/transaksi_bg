@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const sheetUrl = "https://script.google.com/macros/s/AKfycbz-SgW2ujs7ZbnJrKsYV91g7-VDZpAG73kWMiFKXitO9tyzSHatOdLqn4UQwTcgOEA/exec";
+  const sheetUrl = "https://script.google.com/macros/s/AKfycby9RJg2Xk8gHjl84OhL-V1W2jS9J4qaGtscr9AGH1XWhmI8klT9KwDFXp2e5jFjKUU/exec";
 
   if (req.method === "POST") {
     try {
