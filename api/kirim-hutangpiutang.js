@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ result: "error", message: "Method not allowed" });
   }
 
-  const url = "https://script.google.com/macros/s/AKfycbz-SgW2ujs7ZbnJrKsYV91g7-VDZpAG73kWMiFKXitO9tyzSHatOdLqn4UQwTcgOEA/exec"; // Ganti dengan URL Anda
+  const url = "https://script.google.com/macros/s/AKfycby9RJg2Xk8gHjl84OhL-V1W2jS9J4qaGtscr9AGH1XWhmI8klT9KwDFXp2e5jFjKUU/exec"; // Ganti dengan URL Anda
 
   try {
     const response = await fetch(url, {
