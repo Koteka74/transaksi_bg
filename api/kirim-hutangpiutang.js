@@ -1,33 +1,34 @@
-// api/kirim-hutangpiutang.js
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ result: "error", message: "Method Not Allowed" });
+  const sheetUrl = "https://script.google.com/macros/s/AKfycbz-SgW2ujs7ZbnJrKsYV91g7-VDZpAG73kWMiFKXitO9tyzSHatOdLqn4UQwTcgOEA/exec";
+
+  if (req.method === "POST") {
+    try {
+      const response = await fetch(sheetUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req.body),
+      });
+
+      const data = await response.json();
+      return res.status(200).json(data);
+    } catch (err) {
+      return res.status(500).json({ result: "error", message: "Gagal kirim data", detail: err.message });
+    }
   }
 
-  const { Tanggal, Uraian, Jenis, Jumlah } = req.body;
-
-  if (!Tanggal || !Uraian || !Jenis || !Jumlah) {
-    return res.status(400).json({ result: "error", message: "Data tidak lengkap" });
+  if (req.method === "GET") {
+    try {
+      const url = `${sheetUrl}?sheet=HutangPiutang`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return res.status(200).json(data);
+    } catch (err) {
+      return res.status(500).json({ result: "error", message: "Gagal ambil data", detail: err.message });
+    }
   }
 
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbz-SgW2ujs7ZbnJrKsYV91g7-VDZpAG73kWMiFKXitO9tyzSHatOdLqn4UQwTcgOEA/exec";
-
-  try {
-    const response = await fetch(SHEET_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sheet: "HutangPiutang",
-        Tanggal,
-        Uraian,
-        Hutang: Jenis === "Hutang" ? Jumlah : "",
-        Piutang: Jenis === "Piutang" ? Jumlah : "",
-      }),
-    });
-
-    const result = await response.json();
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({ result: "error", message: err.message });
-  }
+  // Jika bukan GET atau POST
+  return res.status(405).json({ error: "Method not allowed" });
 }
