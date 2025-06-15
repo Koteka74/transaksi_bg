@@ -95,7 +95,6 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
   } catch (err) {
     console.error("❌ Error simpan:", err);
     alert("Gagal mengirim data.");
-  }
   } finally {
     submitBtn.classList.remove('loading');
   }
