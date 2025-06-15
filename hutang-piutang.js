@@ -40,8 +40,12 @@ async function muatData() {
     tbody.innerHTML = "";
     hasil.data.forEach(row => {
       const tr = document.createElement("tr");
+
+      const tdTanggal = document.createElement("td");
+      tdTanggal.textContent = formatTanggal(row[0]);
+      
       tr.innerHTML = `
-        <td class="border p-1">${row.Tanggal}</td>
+        <td class="border p-1">${tdTanggal}</td>
         <td class="border p-1">${row.Uraian}</td>
         <td class="border p-1 text-right">${formatAngka(row.Hutang)}</td>
         <td class="border p-1 text-right">${formatAngka(row.Piutang)}</td>
@@ -57,6 +61,12 @@ async function muatData() {
 function formatAngka(nilai) {
   const n = parseFloat(nilai || "0");
   return n ? n.toLocaleString("id-ID") : "";
+}
+
+function formatTanggal(isoDate) {
+  const d = new Date(isoDate);
+  if (isNaN(d)) return isoDate; // fallback
+  return d.toLocaleDateString("id-ID"); // output: dd/mm/yyyy
 }
 
 document.addEventListener("DOMContentLoaded", muatData);
