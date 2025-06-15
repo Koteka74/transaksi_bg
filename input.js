@@ -29,6 +29,9 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
   const jumlah = jumlahFormatted.replace(/\./g, "").replace(/,/g, "");
   const keterangan = document.getElementById("keterangan").value;
 
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.classList.add('loading');
+
   if (!tanggal || !uraian || !jumlah) {
     alert("Tanggal, Uraian, dan Jumlah wajib diisi.");
     return;
@@ -83,7 +86,6 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
           }
         });
       }
-
       
       setTimeout(() => notif.classList.add("hidden"), 3000);
 
@@ -93,6 +95,9 @@ document.getElementById("formTransaksi").addEventListener("submit", async functi
   } catch (err) {
     console.error("❌ Error simpan:", err);
     alert("Gagal mengirim data.");
+  }
+  } finally {
+    submitBtn.classList.remove('loading');
   }
 });
 
