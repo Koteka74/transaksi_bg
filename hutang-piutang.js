@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const uraian = document.getElementById("uraian").value;
     const jumlah = document.getElementById("jumlah").value.replace(/\./g, "");
 
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('loading');
+    
     if (!tanggal || !uraian || !jumlah) {
       alert("Isi semua data");
       return;
@@ -37,6 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("❌ Error simpan:", err);
       alert("Gagal mengirim data.");
+    } finally {
+      submitBtn.classList.remove('loading');
     }
   });
 
