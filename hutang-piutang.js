@@ -34,7 +34,7 @@ document.getElementById("formHP").addEventListener("submit", async function (e) 
 
 async function muatData() {
   try {
-    const res = await fetch("/api/proxy?sheet=HutangPiutang");
+    const res = await fetch("/api/kirim-hutangpiutang");
     const hasil = await res.json();
     const tbody = document.getElementById("tbodyHP");
     tbody.innerHTML = "";
