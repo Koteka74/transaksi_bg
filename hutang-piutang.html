@@ -117,52 +117,32 @@
       <main class="p-4 bg-gray-100 flex-1 mt-8">
         <h1 class="text-xl font-bold py-6">Hutang / Piutang</h1>
 
-        <form id="formHP" class="space-y-4 max-w-xl mb-6">
-          <div>
-            <label for="jenisTransaksi" class="block text-sm font-semibold">Jenis</label>
-            <select id="jenisTransaksi" class="w-full p-2 border rounded">
-              <option value="Hutang">Hutang</option>
-              <option value="Piutang">Piutang</option>
-            </select>
-          </div>
-          <div>
-            <label for="tanggal" class="block text-sm font-semibold">Tanggal</label>
-            <input type="date" id="tanggalHP" class="w-full p-2 border rounded">
-          </div>
-          <div>
-            <label for="uraian" class="block text-sm font-semibold">Uraian</label>
-            <input type="text" id="uraianHP" class="w-full p-2 border rounded">
-          </div>
-          <div>
-            <label for="jumlah" class="block text-sm font-semibold">Jumlah</label>
-            <input type="text" id="jumlahHP" class="w-full p-2 border rounded" placeholder="Contoh: 150000">
-          </div>
-          <button type="submit" class="btn-spinner relative bg-blue-500 text-white py-2 px-4 rounded">
-            <span class="text">Simpan</span>
-            <span class="spinner">
-              <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            </span>
-          </button>
+        <form id="formHP" class="space-y-4">
+          <select id="jenis" class="w-full border p-2 rounded">
+            <option value="hutang">Hutang</option>
+            <option value="piutang">Piutang</option>
+          </select>
+          <input type="date" id="tanggal" class="w-full border p-2 rounded">
+          <input type="text" id="uraian" class="w-full border p-2 rounded" placeholder="Uraian">
+          <input type="text" id="jumlahHP" class="w-full border p-2 rounded" placeholder="Jumlah">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded" type="submit">Simpan</button>
         </form>
 
         <div id="notif" class="hidden bg-green-100 text-green-800 p-3 rounded mb-4">✅ Data berhasil disimpan!</div>
 
-        <h2 class="text-xl font-bold mb-2">Riwayat Transaksi</h2>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white border rounded">
-            <thead class="bg-blue-100">
-              <tr>
-                <th class="p-2 border">Tanggal</th>
-                <th class="p-2 border">Uraian</th>
-                <th class="p-2 border">Hutang</th>
-                <th class="p-2 border">Piutang</th>
-                <th class="p-2 border">Saldo</th>
-                </tr>
-              </thead>
-            <tbody id="tabelHP"></tbody>
+        <div class="mt-6">
+          <h2 class="font-semibold mb-2">Data Tersimpan</h2>
+          <table class="w-full text-sm border" id="tabelHP">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="border p-2">Tanggal</th>
+                <th class="border p-2">Uraian</th>
+                <th class="border p-2">Hutang</th>
+                <th class="border p-2">Piutang</th>
+                <th class="border p-2">Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHP"></tbody>
           </table>
         </div>
       </main>
