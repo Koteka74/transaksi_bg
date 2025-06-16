@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const sheetName = "HutangPiutang";
-  const sheetAPI = "https://script.google.com/macros/s/AKfycby9RJg2Xk8gHjl84OhL-V1W2jS9J4qaGtscr9AGH1XWhmI8klT9KwDFXp2e5jFjKUU/exec";
+  const sheetAPI = "https://script.google.com/macros/s/AKfycbx_nIcucPxchilol0iTxJ5ROfsVyrodrQ4jzqDyS27fjkSA7msSqS-sjaeSBXsGVYM/exec";
 
   if (req.method === "POST") {
     try {
