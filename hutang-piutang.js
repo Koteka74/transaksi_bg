@@ -63,7 +63,7 @@ function formatAngka(nilai) {
   return n ? n.toLocaleString("id-ID") : "";
 }
 
-function formatTanggal(isoDate) {
+function formatTanggalLokal(isoDate) {
   const d = new Date(isoDate);
   if (isNaN(d)) return isoDate; // fallback
   return d.toLocaleDateString("id-ID"); // output: dd/mm/yyyy
