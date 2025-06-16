@@ -43,6 +43,8 @@ async function muatData() {
     const res = await fetch("/api/kirim-hutangpiutang");
     const hasil = await res.json();
     const tbody = document.getElementById("tbodyHP");
+    const data = await res.json();
+    
     tbody.innerHTML = "";
     hasil.data.forEach(row => {
       const tr = document.createElement("tr");
