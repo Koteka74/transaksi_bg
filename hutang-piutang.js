@@ -1,33 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formHP");
-  const jenisSelect = document.getElementById("jenisHP");
-  const jumlahInput = document.getElementById("jumlahHP");
-
-  // Format input jumlah saat diketik
-  jumlahInput.addEventListener("input", function () {
-    const raw = this.value.replace(/\D/g, "");
-    if (raw) {
-      try {
-        this.value = parseInt(raw).toLocaleString("id-ID");
-      } catch (e) {
-        this.value = "";
-      }
-    } else {
-      this.value = "";
-    }
-  });
 
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const tanggal = document.getElementById("tanggalHP").value;
     const uraian = document.getElementById("uraianHP").value;
-    const jumlahFormatted = jumlahInput.value;
-    const jumlah = jumlahFormatted.replace(/\./g, "").replace(/,/g, "");
-    const jenis = jenisSelect.value;
+    const jumlahFormatted = document.getElementById("jumlahHP").value;
+    const jenis = document.getElementById("jenisHP").value;
 
+    const jumlah = jumlahFormatted.replace(/\./g, "").replace(/,/g, "");
     if (!tanggal || !uraian || !jumlah) {
-      alert("Tanggal, uraian, dan jumlah wajib diisi.");
+      alert("Semua kolom wajib diisi");
       return;
     }
 
@@ -50,12 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const hasil = await res.json();
       if (hasil.result === "success") {
-        form.reset();
+        document.getElementById("formHP").reset();
         document.getElementById("notifHP").classList.remove("hidden");
-        await loadData(); // Refresh tabel
-        setTimeout(() => document.getElementById("notifHP").classList.add("hidden"), 3000);
+        await loadData();
+        setTimeout(() => {
+          document.getElementById("notifHP").classList.add("hidden");
+        }, 3000);
       } else {
-        alert("Gagal menyimpan data: " + hasil.message);
+        alert("Gagal menyimpan data.");
       }
     } catch (err) {
       console.error("❌ Gagal kirim:", err);
@@ -63,20 +49,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  loadData(); // saat pertama kali halaman dibuka
+  document.getElementById("jumlahHP").addEventListener("input", function () {
+    const raw = this.value.replace(/\D/g, "");
+    if (raw) {
+      try {
+        this.value = parseInt(raw).toLocaleString("id-ID");
+      } catch (e) {
+        this.value = "";
+      }
+    } else {
+      this.value = "";
+    }
+  });
+
+  loadData();
 });
 
-// Format angka
 function formatAngka(nilai) {
   if (!nilai || isNaN(nilai)) return "0";
   return parseInt(nilai).toLocaleString("id-ID");
 }
 
-// Load data dari API
 async function loadData() {
   try {
     const res = await fetch("/api/kirim-hutangpiutang?sheet=HutangPiutang");
-    const data = await res.json();
+    const json = await res.json();
 
     const tbody = document.querySelector("#tabelHP tbody");
     tbody.innerHTML = "";
@@ -84,7 +81,7 @@ async function loadData() {
     let totalHutang = 0;
     let totalPiutang = 0;
 
-    data.forEach(row => {
+    json.forEach(row => {
       const tr = document.createElement("tr");
       const tanggal = new Date(row.Tanggal);
       const tdTanggal = isNaN(tanggal) ? row.Tanggal : tanggal.toLocaleDateString("id-ID");
