@@ -59,7 +59,9 @@ async function muatData() {
         <td class="border p-1 text-right">${formatAngka(row.Piutang)}</td>
         <td class="border p-1 text-right">${formatAngka(row.Saldo)}</td>
       `;
-
+      tbody.appendChild(tr);
+    });
+    
       // Hitung total hutang & piutang
       let totalHutang = 0;
       let totalPiutang = 0;
@@ -78,8 +80,8 @@ async function muatData() {
         <td class="border p-1"></td>
       `;
       
-      tbody.appendChild(tr);
-    });
+     tbody.appendChild(totalRow);
+    
   } catch (err) {
     console.error("❌ Gagal ambil data:", err);
   }
