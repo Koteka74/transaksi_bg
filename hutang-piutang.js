@@ -43,7 +43,6 @@ async function muatData() {
     const res = await fetch("/api/kirim-hutangpiutang");
     const hasil = await res.json();
     const tbody = document.getElementById("tbodyHP");
-    const data = await res.json();
     
     tbody.innerHTML = "";
     hasil.data.forEach(row => {
@@ -60,28 +59,7 @@ async function muatData() {
         <td class="border p-1 text-right">${formatAngka(row.Saldo)}</td>
       `;
       tbody.appendChild(tr);
-    });
-    
-      // Hitung total hutang & piutang
-      let totalHutang = 0;
-      let totalPiutang = 0;
-
-      data.forEach(row => {
-        totalHutang += parseInt(row.Hutang || 0);
-        totalPiutang += parseInt(row.Piutang || 0);
-      });
-
-      // Tambahkan baris total ke tabel
-      const totalRow = document.createElement("tr");
-      totalRow.innerHTML = `
-        <td class="border p-1 font-bold text-right" colspan="2">Jumlah</td>
-        <td class="border p-1 text-right font-bold text-red-600">${formatAngka(totalHutang)}</td>
-        <td class="border p-1 text-right font-bold text-green-600">${formatAngka(totalPiutang)}</td>
-        <td class="border p-1"></td>
-      `;
-      
-     tbody.appendChild(totalRow);
-    
+    });   
   } catch (err) {
     console.error("❌ Gagal ambil data:", err);
   }
