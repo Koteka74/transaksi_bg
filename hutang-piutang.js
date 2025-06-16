@@ -45,7 +45,7 @@ async function muatData() {
       tdTanggal.textContent = formatTanggal(row[0]);
       
       tr.innerHTML = `
-        <td class="border p-1">${tdTanggal}</td>
+        <td class="border p-1">${formatTanggalLokal(row.Tanggal)}</td>
         <td class="border p-1">${row.Uraian}</td>
         <td class="border p-1 text-right">${formatAngka(row.Hutang)}</td>
         <td class="border p-1 text-right">${formatAngka(row.Piutang)}</td>
