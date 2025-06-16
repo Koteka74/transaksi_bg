@@ -13,7 +13,7 @@ document.getElementById("formHP").addEventListener("submit", async function (e) 
     Hutang: jenis === "hutang" ? jumlah : "",
     Piutang: jenis === "piutang" ? jumlah : ""
   };
-
+  
   try {
     const res = await fetch("/api/kirim-hutangpiutang", {
       method: "POST",
@@ -32,6 +32,12 @@ document.getElementById("formHP").addEventListener("submit", async function (e) 
   }
 });
 
+function formatTanggalLokal(isoDate) {
+  const d = new Date(isoDate);
+  if (isNaN(d)) return isoDate; // fallback
+  return d.toLocaleDateString("id-ID"); // output: dd/mm/yyyy
+}
+
 async function muatData() {
   try {
     const res = await fetch("/api/kirim-hutangpiutang");
@@ -42,7 +48,7 @@ async function muatData() {
       const tr = document.createElement("tr");
 
       const tdTanggal = document.createElement("td");
-      tdTanggal.textContent = formatTanggal(row[0]);
+      tdTanggal.textContent = formatTanggalLokal(row[0]);
       
       tr.innerHTML = `
         <td class="border p-1">${formatTanggalLokal(row.Tanggal)}</td>
@@ -61,12 +67,6 @@ async function muatData() {
 function formatAngka(nilai) {
   const n = parseFloat(nilai || "0");
   return n ? n.toLocaleString("id-ID") : "";
-}
-
-function formatTanggalLokal(isoDate) {
-  const d = new Date(isoDate);
-  if (isNaN(d)) return isoDate; // fallback
-  return d.toLocaleDateString("id-ID"); // output: dd/mm/yyyy
 }
 
 document.addEventListener("DOMContentLoaded", muatData);
